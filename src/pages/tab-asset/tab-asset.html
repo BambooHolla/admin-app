@@ -1,0 +1,78 @@
+<!--
+  Generated template for the TabAssetPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <!-- 下拉选择 -->
+  <ion-navbar class="header-title">
+     
+      <button ion-button menuToggle>
+          <picasso-icon name="picasso-account" class="title-account"></picasso-icon>
+      </button>
+    <ion-title>
+      <span class="title" (click)="handlerSelectProduct()">{{headerProduct}}<picasso-icon name="picasso-inverted-triangle"></picasso-icon></span>
+      <!-- <div style="width: 24px;height: 24px;margin-left: 24px;background: red; position: absolute; top: 50%;left: 0;" (click)="routeTo('page-account')"></div> -->
+    </ion-title>
+  </ion-navbar>
+
+  <!-- 总资产 -->
+  <div class="assets">
+      <div class="assets-message"><span>总资产</span><picasso-icon name="picasso-eye-{{appDataProvider?.hiddenData? 'close' : 'open'}}" (click)="handlerHiddenData()"></picasso-icon> </div>
+      <div class="assets-total">{{appDataProvider?.hiddenData? hidden_data_logo : 123456789.123456789}}</div>
+      <div class="assets-rate" [hidden]="appDataProvider?.hiddenData">≈ 132132132131213 <span class="unit">CNY</span></div>
+  </div>
+  
+  <ion-grid class="operate">
+    <!-- 资产类型 -->
+    <ion-row class="type">
+      <ion-col (click)="checkType(item,i)" *ngFor="let item of typeArr,let i = index" [class.action]="selectTypeIndex == i">
+        <div class="name">
+          {{item.name}}
+        </div>
+        <div class="bottom-line" [hidden]="selectTypeIndex != i"></div>
+      </ion-col>
+    </ion-row>
+
+    <!-- 资产额度 -->
+    <ion-row class="money">
+      <ion-col>
+          <div class="money-total">
+            <span class="total-name">
+              <picasso-icon name="picasso-asset"></picasso-icon> 
+              {{selectType?.name}}
+            </span> 
+            <span class="total-value">{{selectType?.value}}</span> 
+            <span class="unit">IBT</span>
+            <picasso-icon name="picasso-down-order"></picasso-icon>
+          </div>
+      </ion-col>
+    </ion-row>
+    
+  </ion-grid>
+</ion-header>
+
+
+<ion-content>
+  
+  <ion-list class="address-group">
+    <ion-item  *ngFor="let address of selectAddress" class="address-item">
+      <div class="item-header"  (click)="routeTo('page-address-asset-list',{product:address,productName:headerProduct})">
+        <div class="item-header-title">
+          {{address?.title}}
+        </div>
+        <div class="item-header-total">
+          {{address?.total}}
+          <span class="unit">IBT</span>
+        </div>
+      </div>
+      <div class="address-item-body">
+        <div class="overflow-ellipsis item-body-address"  (click)="routeTo('page-address-asset-list',{product:address,productName:headerProduct})">
+          {{address?.address}}
+        </div>
+        <picasso-icon name="picasso-copy" (click)="copyAddress(address?.address)"></picasso-icon>
+      </div>
+    </ion-item>
+  </ion-list>
+</ion-content>

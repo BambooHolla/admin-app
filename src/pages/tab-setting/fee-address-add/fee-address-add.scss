@@ -1,0 +1,225 @@
+page-fee-address-add {
+    ion-header {
+        background-color: #f7f7f7;
+       
+        &.change-background-color {
+            background-color: #fff;
+            // transition-duration: 0.5s;
+        }
+        ion-navbar {
+            position: relative;
+        }
+        ion-title {
+            >div {
+                position: relative;
+                // overflow: hidden;
+                color: transparent!important;
+                div {
+                    color: color($colors, header-txt);
+                    position: absolute;
+                    top:0;
+                    left: 50%;
+                    transform: translateX(-50%)!important;
+                }
+            }
+        }
+
+    }
+  
+    .handler-address-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: color($colors, light-blue);
+        font-size: 1.6rem;
+    }
+
+    .scroll-content {
+        background-image: url('../assets/imgs/withdraw-bj-1.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        overflow-y: hidden;
+        background-position: bottom left;
+        background-color: #f7f7f7;
+    }
+    .change-background-img {
+        .scroll-content {
+            background-image: url('../assets/imgs/withdraw-bj-2.png');
+            background-color: #fff;
+            // transition-duration: 0.5s;
+        }
+    }
+
+
+        /* 3d效果 */
+    .page-wrapper {
+        /* transform-style: preserve-3d; */
+        /* perspective: 2020px; */
+        /* perspective-origin: 50% 10%; */
+        position: relative;
+    }
+    .first-step,
+    .second-step {
+        pointer-events: none;
+        // position: absolute;
+        // top: 14rem;
+        /*width=72vw,rest=28 */
+        // left: 14vw;
+        transition-duration: 0.5s;
+    }
+    .first-step {
+        &.first {
+        pointer-events: all;
+        transform: scale(1);
+        opacity: 1;
+        }
+        &.second {
+        pointer-events: none;
+        transform: scale(0.4);
+        opacity: 0;
+        }
+    }
+
+    .second-step {
+        &.first {
+        pointer-events: none;
+        transform: scale(0.4);
+        opacity: 0;
+        }
+        &.second {
+        pointer-events: all;
+        transform: scale(1);
+        opacity: 1;
+        }
+    }
+
+    .page-tip {
+        color: #9ca8b7;
+        font-size: 1.4rem;
+        margin-bottom: 1.6rem;
+    }
+    .create-first {
+        width: 80%;
+        // background-color: royalblue;
+        height: 500px;
+        margin: 0 auto;
+        position: absolute;
+        top:25vh;
+        left: 50%;
+        transform: translateX(-50%);
+        .create-first-number {
+            ion-item {
+                padding-left: 0 !important;         
+                width: 130px;
+                margin: 0 auto;
+                border-bottom-left-radius: 4px !important;
+                border-bottom-right-radius: 4px !important;
+                box-shadow: 0 2px 0px 0px #e0e0e0;
+            }
+            .item-inner {
+                padding-right: 0;
+            }
+            .text-input {
+                margin:  0;
+                width: 100%;
+                font-size: 7rem;
+                text-align: center;
+                color: #000;
+                text-shadow: 0 0 1px #fff, 
+                            0px 0px 2px #eee, 
+                            1px 1px 2px #ddd, 
+                            2px 2px 2px #ccc, 
+                            3px 3px 2px #bbb, 
+                            4px 4px 2px #aaa;
+            }
+        }
+        .create-first-number-btn {
+            display: flex;
+            justify-content: space-between;
+            div {
+                margin-top: 88px;
+                width: 60px;
+                height: 60px;
+                text-align: center;
+                line-height: 60px;
+                // background-color: burlywood;
+                border-radius: 50%;
+                // border: 1px solid #eaecf2;
+                box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.08);
+                            // 0 0 3px 3px #ddd,
+                            // 0 0 4px 4px #ccc;
+                i {
+                    font-size: 2.6rem;
+                    color: #4a71a5;
+                    font-weight: 600;
+                }
+
+            }
+        }
+    }
+    .import-first {
+        ion-item {
+            padding-left: 0 !important;
+            .item-inner {
+                padding-right: 0 !important;
+            }
+        }
+        ion-textarea {
+            textarea {
+                border-radius: 5px;
+                height: 96px;
+                margin:  0;
+                width: 100%;
+                padding: 8px 12px;
+                font-size: 1.6rem;
+            }
+            textarea:focus {
+                border:1px solid #9cc9ec;
+            }
+        }
+    }
+    .second {
+        // background: tomato;
+        .second-input {
+            margin-bottom: 42px;
+            ion-item {
+                box-shadow: 0px 4px 5px 0px #e9e9e9;
+            }
+            .second-input-name {
+                margin-bottom: 12px;
+                .text-input {
+                    color: #75a4d4;
+                }
+            }
+            .second-input-address {
+            }
+            .input-label {
+                color: #9ca8b7;
+                margin-bottom: 8px;
+                font-size: 1.5rem;
+            }
+        }
+    }
+    
+    ion-item {
+        border-radius: 5px !important;
+        .text-input {
+            font-size: 1.7rem;
+            color: #9cc9ec;
+          
+        }    
+    }
+
+    ion-content {
+        .first-step,
+        .second-step {
+        width: 100%;
+        position: absolute;
+        //   top: 14rem;
+        /*width=72vw,rest=28 */
+        // left: 14vw;
+        
+        }
+    }
+}

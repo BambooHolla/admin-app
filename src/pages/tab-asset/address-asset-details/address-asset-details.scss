@@ -1,0 +1,65 @@
+page-address-asset-details {
+    .scroll-content {
+        background-image: url('../assets/imgs/setting-bj.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+    
+    ion-content {
+        .address-title {
+            padding-bottom: 2.4rem;
+            border-bottom: 1px solid #f0f0f0;
+            .address-type {
+                text-align: center;
+                margin-top: 2rem;
+                margin-bottom: 1.4rem;
+                picasso-icon {
+                    &.success {
+                        color: #8fd4c6;
+                    }
+                    &.warning {
+                        color: #ffe779;
+                    }
+                    &.error {
+                        color: #fb8a8a;
+                    }
+                    i {
+                        font-size: 5.4rem;
+                    }
+                }
+            }
+            .address-asset {
+                text-align: center;
+                color: #242435;
+                font-size: 2.6rem;
+                font-weight: 400;
+                .unit {
+                    color: #9ca8b7;
+                    font-size: 1.4rem;
+                    font-weight: 400;
+                }
+            }
+        }
+
+        .address-details-group {
+            padding-left: 16px;
+            .address-details-item {
+                border-bottom: 1px solid #f0f0f0;
+                padding: 1.8rem 0;
+                line-height: 2.2rem;
+                .address-details-item-label {
+                    color: #cacaca;
+                    font-size: 1.6rem;
+                    margin-bottom: 0.6rem;
+                }
+                .address-details-item-content {
+                    color: #242435;
+                    font-size: 1.6rem;
+                    padding-right: 16px;
+                }
+            }
+        }
+    }
+        
+}

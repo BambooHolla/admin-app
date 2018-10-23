@@ -1,1 +1,34 @@
-<ion-nav [root]="rootPage" #myNav></ion-nav>
+<ion-menu [content]="myNav" id="myMenu">
+    <ion-header>
+        <ion-toolbar>
+        <ion-title></ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <ion-item>
+          <div class="menu-account-info">
+            <div  class="menu-account-info-header">
+                <div class="menu-account-info-header-logo">
+                    
+                </div>
+                <div class="menu-account-info-header-value">
+                    <div class="overflow-ellipsis">13255487402</div>
+                    <div (click)="loginOut()">
+                        安全退出
+                    </div>
+                </div>
+            </div>
+            <div  class="menu-account-info-last">上次登录：2018-10-08 13:34:34</div>
+          </div>
+        </ion-item>
+        <ion-list class="menu-account-handle">
+            <button menuClose ion-item *ngFor="let p of pages" (click)="handlerMenuOpenPage(p.path)">
+                <picasso-icon [name]="p?.icon"></picasso-icon> {{p?.name}}
+            </button>
+        </ion-list>
+      
+    </ion-content>
+
+</ion-menu>
+<ion-nav #myNav></ion-nav>

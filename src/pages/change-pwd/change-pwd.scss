@@ -1,0 +1,56 @@
+page-change-pwd {
+   
+    .scroll-content {
+        background-image: url('../assets/imgs/withdraw-bj-1.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        overflow-y: hidden;
+        background-position: center;
+        background-color: #f7f7f7;
+    }
+
+    .top-tip {
+        padding: 1.6rem 0 1.6rem 22px;
+        color: #9ca8b7;
+        font-size: 1.4rem;
+    }
+    
+    .input-item {
+        .item-inner {
+            border-bottom: 1px solid #eaeaec !important;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            ion-label {
+                color: #586576;
+                font-size: 1.5rem;
+                &[fixed] {
+                    min-width: 72px;
+                    width: 72px;
+                    flex: 0 0 72px;
+                }
+            }
+            input {
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    .bottom-tip {
+        color: #9cc9ec;
+        padding: 0.6rem 0 1.6rem 22px;
+        font-size: 1.4rem;
+        margin-bottom: 2.5rem;
+    }
+
+    .sub-input {
+        button {
+            width: 85%;
+            margin: 0 auto;
+            display: block;
+            color: #fff;
+            background-color: #9cc9ec;
+            border-radius: 5px;
+            box-shadow: 2px 3px 10px 4px #e5e5e5;
+        }
+    }
+}

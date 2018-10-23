@@ -1,0 +1,73 @@
+page-tab-inform {
+    ion-header {
+        padding-bottom: 1.6rem !important;
+    }
+    .title {
+       margin-top: 3.4rem;
+        font-size: 3.2rem;
+        font-weight: 700;
+        // position: relative;
+        > .all-read {
+            color: color($colors, light-blue);
+            font-weight: 500;
+            font-size: 1.8rem;
+            position: absolute;
+            right: 12px;
+            bottom: 11px;
+        }
+    }
+    .scroll-content {
+        background-image: url('../assets/imgs/setting-bj.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+    ion-list {
+        background-color: white;
+        &.padding-bottom {
+            margin-bottom: 0px;
+            padding-bottom: 76px !important;
+            background-image: url('../assets/imgs/setting-bj.png');
+            background-size: 100% auto;
+            background-repeat: no-repeat;
+            background-position: bottom left;
+        }
+    }
+    .inform-box {
+        margin-bottom: 1.4rem !important;
+        box-shadow: 18px -7px 9px -3px #f6f6f6;
+    }
+    .inform-box:first-child {
+        box-shadow: 0px 0px 0px 0px #fff;
+    }
+    .inform-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 1.4rem;
+        > .inform-title {
+            color: #586576;
+            font-size: 1.7rem;
+            font-weight: 400;
+        }
+        > .inform-date {
+            font-size: 1.4rem;
+            position: relative;
+            top: 5px;
+            color: color($colors, light-blue);
+        }
+    }
+    .inform-content {
+        color: #9ca8b7;
+        font-size: 1.3rem;
+        width: 80%;
+    }
+    .inform-read {
+        position: absolute;
+        bottom: 14px;
+        right: 22px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: #ff7f7f;
+    }
+}

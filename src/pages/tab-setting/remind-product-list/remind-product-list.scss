@@ -1,0 +1,145 @@
+page-remind-product-list {
+    ion-header {
+        border-bottom: 1px solid #f7f7f7;
+        ion-navbar {
+            position: relative;
+        }
+        ion-title {
+            >div {
+                position: relative;
+                // overflow: hidden;
+                color: transparent!important;
+                div {
+                    color: color($colors, header-txt);
+                    position: absolute;
+                    top:0;
+                    left: 50%;
+                    transform: translateX(-50%)!important;
+                }
+            }
+        }
+    }
+    .handler-modify-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: color($colors, light-blue);
+        font-size: 1.6rem;
+    }
+    .second-back-btn {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 55px;
+        width: 40px;
+    }
+
+    ion-icon[item-end] {
+        color: #8acafb !important;
+        margin-top: 14px !important;
+    }
+    .scroll-content {
+        background-image: url('../assets/imgs/withdraw-bj-1.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        overflow-y: hidden;
+        background-position: bottom left;
+        background-color: #f7f7f7;
+    }
+
+    .product-type {
+        .item-inner {
+            color: #586576;
+            border-bottom: 1px solid #eaeaec !important;
+            font-size: 1.54rem;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            .input-wrapper {
+                position: relative;
+                .product-amount {
+                    position: absolute;
+                    right: 8px;
+                    top: 18px;
+                    span {
+                        font-size: 1.4rem;
+                    }
+                }
+            }
+        }
+      
+    }
+    .second-step {
+        padding:  0 16px;
+        .second-tip {
+            margin-top: 18px;
+            color: #9ca8b7;
+            font-size: 1.5rem;
+            margin-bottom: 14px;
+        }
+        .second-input {
+            position: relative;
+       
+            .text-input-ios {
+                text-align: center;
+                color: #9cc9ec;
+                font-size: 22px;
+                width: calc(100% - 36px);
+            }
+           
+            .second-input-unit {
+                position: absolute;
+                top: calc(50% + 1px);
+                // left: calc(50% + 12px);
+                right: 8px;
+                transform: translateY(-50%);
+                color: #bee2fe;
+                font-size: 1.8rem;
+            }
+
+        }
+    }
+    /* 3d效果 */
+    .page-wrapper {
+        /* transform-style: preserve-3d; */
+        /* perspective: 2020px; */
+        /* perspective-origin: 50% 10%; */
+        position: relative;
+    }
+    .first-step,
+    .second-step {
+        pointer-events: none;
+        position: absolute;
+        // top: 14rem;
+        /*width=72vw,rest=28 */
+        // left: 14vw;
+        width: 100%;
+        transition-duration: 0.5s;
+    }
+    .first-step {
+        &.first {
+        pointer-events: all;
+        transform: scale(1);
+        opacity: 1;
+        }
+        &.second {
+        pointer-events: none;
+        transform: scale(0.4);
+        opacity: 0;
+        }
+    }
+
+    .second-step {
+        &.first {
+        pointer-events: none;
+        transform: scale(0.4);
+        opacity: 0;
+        }
+        &.second {
+        pointer-events: all;
+        transform: scale(1);
+        opacity: 1;
+        }
+    }
+
+}

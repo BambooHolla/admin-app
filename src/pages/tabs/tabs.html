@@ -1,33 +1,11 @@
-<!-- <component-menu [tabRef]="maintabs" (selectTabEmitter)="selectTab($event)"></component-menu> -->
-<!-- <component-menu (updateNumberI)="selectTab($event)"></component-menu> -->
-<!-- <ion-menu [content]="maintabs" id="menu1">
-  <bn-menu (selectTabEmitter)="selectTab($event)"></bn-menu>
-</ion-menu> -->
+<ion-tabs tabsHighlight="true" #myTabs class="picassoicon" [class.tabs-hidden]="getTabsHidden()">
+  <ion-tab tabUrlPath="tab-asset" root="tab-asset" tabTitle="资产" tabIcon="picasso-asset">
 
-<!-- <ion-menu [content]="maintabs" side="right" id="menu2">
-  <ion-header>
-    <ion-toolbar color="secondary">
-      <ion-title>Right Menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item>Menu2</ion-item>
-      <ion-item menuClose detail-none>Close Menu</ion-item>
-    </ion-list>ionic serve
-  </ion-content>
-</ion-menu> -->
+  </ion-tab>
+  <ion-tab tabUrlPath="tab-setting" root="tab-setting" tabTitle="设置" tabIcon="picasso-setting">
 
-<ion-tabs #maintabs  tabsHighlight="true" [class.bg-blur]='!!appSetting?.hasTabBlur'>
-<!-- <ion-tabs #maintabs class="bg-in bg-light"> -->
-  <ion-tab #quotationsTab tabUrlPath="quotations" root="quotations" tabTitle=" {{'MARKETS'|translate}}" tabIcon="行情"></ion-tab>
-  <ion-tab #exchangeTab tabUrlPath="exchange" root="exchange" tabTitle=" {{'EXCHANGE'|translate}}" tabIcon="交易"></ion-tab>
-  <!-- <ion-tab #newsTab tabUrlPath="news" root="news" tabTitle=" {{'INFO'|translate}}" tabIcon="资讯"></ion-tab> -->
-  <!-- <ion-tab #optionalTab tabUrlPath="optional" root="optional" tabTitle=" {{'POSITION'|translate}}" tabIcon="持仓"></ion-tab> -->
-  <!-- tabsHideOnSubPages 不会对 Tab 页面起作用，而是对于在 Tab 页面中打开的子页面起作用 -->
-  <ion-tab #homeTab tabUrlPath="home" root="home" tabTitle=" {{'MINE'|translate}}" tabIcon="我的"></ion-tab>
-
-  <!-- <ion-tab tabUrlPath="trade" rootParams='stockCode' tabTitle="交易" tabIcon="交易"></ion-tab> -->
-  <!-- <ion-tab [root]="editorRoot" tabTitle="编辑器" show="false"></ion-tab> -->
-
+  </ion-tab>
+  <ion-tab tabUrlPath="tab-inform" root="tab-inform" tabTitle="消息" tabIcon="picasso-inform" tabBadge='99+' tabBadgeStyle='danger'>
+    
+  </ion-tab>
 </ion-tabs>

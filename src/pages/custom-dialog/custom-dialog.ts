@@ -1,23 +1,22 @@
-import { Component, Optional, ViewChild, ElementRef } from "@angular/core";
-import {
-  IonicPage,
-  NavController,
-  NavParams,
-  Refresher,
-  Content,
-  ViewController,
-} from "ionic-angular";
-import { FirstLevelPage } from "../../bnlc-framework/FirstLevelPage";
-import { asyncCtrlGenerator } from "../../bnlc-framework/Decorator";
+import { Component } from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
+import { FirstLevelPage } from '../../app-framework/FirstLevelPage';
+import { asyncCtrlGenerator } from '../../app-framework/Decorator';
+/**
+ * Generated class for the CustomDialogPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+
 type buttonOptions = {
   text: string;
   handler?: Function;
   cssClass?: string;
 };
-
 @Component({
-  selector: "page-custom-dialog",
-  templateUrl: "custom-dialog.html",
+  selector: 'page-custom-dialog',
+  templateUrl: 'custom-dialog.html',
 })
 export class CustomDialogPage extends FirstLevelPage {
   constructor(
@@ -49,7 +48,12 @@ export class CustomDialogPage extends FirstLevelPage {
     }
     this.content_title = this.navParams.get("title");
     this.content_subTitle = this.navParams.get("subTitle");
-    this.content_message = this.navParams.get("message");
+    const message = this.navParams.get("message");
+    if (typeof message === "string" && message.startsWith("@@")) {
+      // this.content_message = this.getTranslateSync(message.substr(2));
+    } else {
+      this.content_message = message;
+    }
     this.iconType = this.navParams.get("iconType");
     this.cssClass = this.navParams.get("cssClass");
   }
@@ -64,6 +68,13 @@ export class CustomDialogPage extends FirstLevelPage {
     }
     if (!res) {
       this.closeDialog();
+    }
+  }
+  tryCloseDialog(event) {
+    if (event.target.classList.contains("scroll-content")) {
+      if (this.buttons.length == 0) {
+        this.closeDialog();
+      }
     }
   }
 }

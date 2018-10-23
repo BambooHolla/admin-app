@@ -1,0 +1,45 @@
+<!--
+  Generated template for the RemindProductListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+      <ion-title  class="page-wrapper">
+        (占位)
+        <div class="first-step withdraw-title" [ngClass]='pageStatus'>低额数量</div>
+        <div class="second-step withdraw-title" [ngClass]='pageStatus'>区块数量</div>
+      </ion-title>
+      <div class="handler-modify-btn" (click)="handlerModifyRemindAmount()" *ngIf="pageStatus == 'second'">{{pageStatus == "first" ? "下一步" : "完成"}}</div>
+  </ion-navbar>
+  <div class="second-back-btn" *ngIf="pageStatus == 'second'" (click)="handlerCheckPageStatus('first')"></div>
+</ion-header>
+
+
+<ion-content>
+    <div class="page-wrapper">
+      <div class="first-step" [ngClass]='pageStatus'>
+          <ion-list>
+              <ion-item *ngFor="let product of remindList" class="product-type" (click)="handlerCheckPageStatus('second',product)">
+                {{product?.productName}} 提现划转低额提醒数量
+                <span class="product-amount">{{product?.amount}} <span>{{product?.productName}}</span></span>
+                <ion-icon name="arrow-forward" item-end></ion-icon>
+              </ion-item>
+            </ion-list>
+      </div>
+      
+      <div class="second-step" [ngClass]='pageStatus'>
+        <div class="second-tip">
+            {{selectProduct?.productName}} 提现划转低额提现数量
+        </div>
+        <div class="second-input">
+            <ion-item>
+              <ion-input [(ngModel)]="amountInput"></ion-input>
+            </ion-item>
+            <div class="second-input-unit">{{selectProduct?.productName}}</div>
+        </div>
+      </div>
+    </div>
+</ion-content>

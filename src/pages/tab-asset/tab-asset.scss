@@ -1,0 +1,182 @@
+page-tab-asset {
+    .unit {
+        font-size: 1.2rem !important;
+    }
+    // 顶部下拉选择
+    > ion-header {
+        background-color: #f2f2f2;
+    }
+   
+    .header-title,
+    .assets {
+       background-color: #242435;
+       position: relative;
+    }
+    .title {
+        color: #fff;
+        font-size: 2rem;
+        i {
+            color: color($colors, gray-blue);
+            font-size: 2rem;
+        }
+    }
+    .title-account {
+        color: color($colors, gray-blue);
+        i {
+            font-size: 2.4rem;
+        }
+       
+    }
+    
+    // 总资产
+    .assets {
+        margin-bottom: 0.7rem;
+        height: 14.8rem;
+        text-align: center;
+        color: #68778b;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        background-image: url('../assets/imgs/assets-header-bj.png');
+        background-size: 100% auto;
+        font-size: 1.8rem;
+        line-height: 3.4rem;
+        >div {
+            padding: 0.2rem 0;
+        }
+        >.assets-message {
+            font-size: 1.8rem;
+            position: relative;
+            picasso-icon {
+                position: relative;
+                top: 2px;
+            }
+            i {
+                font-size: 2.4rem;
+                color: color($colors, gray-blue);
+            }
+        }
+        >.assets-total {
+            color: color($colors, gray-blue);
+            font-size: 2.4rem;
+        }
+    }
+    
+    // 资产类型
+    .operate {
+        margin-bottom: 2px;
+        padding: 0;
+        font-size: 1.6rem;
+        font-weight: 500;
+        .type {
+            background-color: #fff;
+            margin-bottom: 0.2rem;
+            div {
+                text-align: center;
+                line-height: 32px;
+            }
+            > ion-col {
+                padding-top: 0.7rem;
+                padding-bottom: 0.7rem;
+                position: relative;
+                color: color($colors, light-blue);
+                &.action {
+                    font-weight: 500;
+                }
+                > .bottom-line {
+                    max-width: 50.5px;
+                    width: 40.4%;
+                    height: 3px;
+                    background-color: color($colors, light-blue);
+                    position: absolute;
+                    bottom: 0;
+                    left: 50%;
+                    transform: translateX(-50%);
+                }
+            }
+            
+        }
+        .money {
+            background-color: #fff;
+            i {
+                font-size: 1.8rem;
+                color: color($colors, light-blue);
+            }
+            .money-total {
+                padding: 0.9rem 12px;
+                color: #586576;
+                font-weight: 400;
+                position: relative;
+                > .total {
+                    &-name {
+                        color: #242435;
+                        font-size: 1.6rem;
+                        
+                    }
+                    &-value {
+                        padding-left: 4px;
+                        color: #586576;
+                        font-size: 1.5rem;
+                    }
+                }
+                .unit {
+                    color: #9ca8b7;
+                    font-size: 1.1rem!important;
+                }
+                >picasso-icon {
+                    position: absolute;
+                    right: 12px;
+                    transform: translateY(0px);
+                    i {
+                        font-size:2.2rem;
+                    }
+                }
+            }
+            
+        }
+    }
+
+    // 资产地址
+    .address-item {
+        > .item-inner {
+            border-bottom: 1px solid #eaeaec !important;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+        }
+        // 标题、资产
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            color: #586576;
+            font-size: 1.6rem;     
+            margin-bottom: 12px;       
+            .item-header-total {
+                position: relative;
+                top: 2px;
+                color: #586576;
+                .unit {
+                    margin-left: 8px;
+                    font-size: 1rem !important;
+                    color: #9ca8b7;
+                }
+            }
+        }
+        // 地址
+        .address-item-body {
+            position: relative;
+            .item-body-address {
+                width: 80%;
+                text-overflow: initial;
+                overflow-x: scroll;
+                font-size: 1.4rem;
+                color: #9ca8b7;
+            }
+            i {
+                position: absolute;
+                top: 1px;
+                right: 0;
+                font-size: 1.6rem;
+                color: color($colors, light-blue);
+            }
+        }
+    }
+}

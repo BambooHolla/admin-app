@@ -1,0 +1,37 @@
+<!--
+  Generated template for the RechargeAddressAddPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>新增充值地址</ion-title>
+    <div class="finish-address-btn" (click)="handlerFinishAddAddress()">完成</div>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <div class="name-item">
+    <p class="item-label">地址名称</p>
+    <ion-item>
+      <ion-input #nameInputer [(ngModel)]="_formData.name" placeholder="请输入地址名称"></ion-input>
+    </ion-item>
+  </div>
+
+  <div class="address-item">
+    <p class="item-label">{{product}}</p>
+    <ion-item>
+        <ion-avatar item-end>
+            <picasso-icon name="picasso-scan"(click)="routeTo('page-address-scan',{auto_return:true,mode:'scan-only'})"></picasso-icon>
+          </ion-avatar>
+      <ion-input #addressInputer [(ngModel)]="_formData.address" placeholder="请输入地址"></ion-input>
+    </ion-item>
+    <div class="address-error">无效地址, 请重新输入</div>
+  </div>
+
+</ion-content>

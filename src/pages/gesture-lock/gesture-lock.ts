@@ -1,8 +1,8 @@
 import {Component, ElementRef, ViewChild, Renderer2} from '@angular/core';
 import {IonicPage, NavController, NavParams, ViewController, Events, Platform, AlertController} from 'ionic-angular';
 import {Storage} from "@ionic/storage";
-
-
+import { FirstLevelPage } from '../../app-framework/FirstLevelPage';
+import { TabsPage, LoginPage } from '../pages';
 
 export class Point {
   x: number;
@@ -13,7 +13,7 @@ export class TipSelectPoint {
   value: Point;
   select: boolean;
 }
-export class GestureLockObj {
+export class AdminAppGestureLockObj {
   password: string;
   chooseType: number;
   step: number;
@@ -24,7 +24,7 @@ export class GestureLockObj {
   }
 }
 
-export class GestureAttemptObj {
+export class AdminAppGestureAttemptObj {
   lockDate: number;
   lastAttemptDate: number;
   attemptsNu: number;
@@ -34,37 +34,37 @@ export class GestureAttemptObj {
   }
  
 }
-
-
-@IonicPage()
 @Component({
   selector: 'page-gesture-lock',
   templateUrl: 'gesture-lock.html',
 })
-export class GestureLockPage {
+export class GestureLockPage extends FirstLevelPage {
   height = Math.floor((window.innerHeight*0.7)) || 320;
   width = Math.floor((window.innerWidth)) || 320;
   chooseType = 3;
   devicePixelRatio; // 设备密度
-  titleMes = "GESTURE_UNLOCK";
+  titleTip = "设置手势密码";
+  titleMes = "绘制解锁图案";
   titleMes_supplement = '';
   titleMes_number:any = '';
-  unSelectedColor = '#666159';
-  selectedColor = '#666159';
+  unSelectedColor = '#a0ccee';
+  selectedColor = '#a0ccee';
+  settingColor = '#fce791';
+  centerColor = "#fff";
+  circularLineWidth = 2;
+  lineWidth = 6;
   // successColor = '#C1B17F';
   errorColor = '#d54e20';
   tipColor = "#999999";
   lockTimeUnit = 60; //尝试失败后锁定多少秒
-  gestureLockObj: GestureLockObj = new GestureLockObj(); //密码本地缓存
-  gestureAttemptObj: GestureAttemptObj = new GestureAttemptObj();  //尝试日期和次数本地缓存
-  unregisterBackButton:any;// 硬件返回
+  adminAppGestureLockObj: AdminAppGestureLockObj = new AdminAppGestureLockObj(); //密码本地缓存
+  adminAppGestureAttemptObj: AdminAppGestureAttemptObj = new AdminAppGestureAttemptObj();  //尝试日期和次数本地缓存
+  showReset: boolean = false;
   firstPassword: string;
   showDelete:boolean = false;
   private hasGestureLock:boolean = false;// 是否设置
   private canTouch = false;
   private radius: number; //小圆点半径
-
-  private tipPoint: Array<TipSelectPoint> = [];
 
   private allPointArray: Point[] = [];
   private unSelectedPointArray: Point[] = [];
@@ -76,19 +76,22 @@ export class GestureLockPage {
   @ViewChild('canvas') canvas: ElementRef;
   textColor = this.tipColor;
 
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private render: Renderer2,
     private storage: Storage,
-    private viewCtrl: ViewController,
+    public viewCtrl: ViewController,
     public events: Events,
     public platform: Platform,
     public alterCtrl: AlertController,
   ) {
+    super(navCtrl, navParams);
   }
 
-  async ngOnInit() {
+  @GestureLockPage.onInit
+  async init() {
     this.height = this.width = this.height > this.width ? this.width : this.height;
     this.devicePixelRatio = window.devicePixelRatio || 1;
     this.radius = this.width * this.devicePixelRatio / (1 + 2 * this.chooseType) / 2; // 半径计算
@@ -101,56 +104,51 @@ export class GestureLockPage {
     this.drawCircles(this.allPointArray);
     this.bindEvent();
 
-    await this.storage.get('gestureLockObj').then(data => {
+    await this.storage.get('adminAppGestureLockObj').then(data => {
       if (data) {
-        this.gestureLockObj = data;
+        this.adminAppGestureLockObj = data;
+        this.titleTip = "手势密码"
+        this.titleMes = "手势密码解锁";
       }
     });
 
-    await this.storage.get('gestureAttemptObj').then(data => {
+    await this.storage.get('adminAppGestureAttemptObj').then(data => {
       if (data) {
-        this.gestureAttemptObj = data;
-        if (this.gestureAttemptObj.attemptsNu === 0) {
+        this.adminAppGestureAttemptObj = data;
+        if (this.adminAppGestureAttemptObj.attemptsNu === 0) {
           const now = Date.now();
-          const last =this.gestureAttemptObj.lockDate;
+          const last =this.adminAppGestureAttemptObj.lockDate;
           const secend = (now - last) / 1000 - this.lockTimeUnit;
           if (secend < 0) {
             this.setInteralFun( Math.abs(Math.ceil(secend)) );
+            this.showReset = true;
           } else { 
-            this.gestureAttemptObj = new GestureAttemptObj();
-            this.storage.set("gestureAttemptObj", this.gestureAttemptObj);
+            this.adminAppGestureAttemptObj = new AdminAppGestureAttemptObj();
+            this.storage.set("adminAppGestureAttemptObj", this.adminAppGestureAttemptObj);
           }
         }
       }
     });
-    this.hasGestureLock = await this.navParams.get('hasGestureLock');
+    // this.hasGestureLock = await this.navParams.get('hasGestureLock');
     
-    if(this.hasGestureLock) {
-      this.resetPasswordFun();
-    }
-    if( this.hasGestureLock != false && this.hasGestureLock != true && !this.unregisterBackButton) {
-      // 打开app解锁，屏蔽
-      this.unregisterBackButton = this.platform.registerBackButtonAction(
-        () => {
+    // if(this.hasGestureLock) {
+    //   this.resetPasswordFun();
+    // }
+    
+    // if( this.hasGestureLock != false && this.hasGestureLock != true && !this.unregisterBackButton) {
+    //   // 打开app解锁，屏蔽
+    //   this.unregisterBackButton = this.platform.registerBackButtonAction(
+    //     () => {
            
-        },
-      ); 
-      this.gestureLockObj.step = 2;
-      this.titleMes = "GESTURE_UNLOCK";
-    }
-    if (this.gestureLockObj.step === 0) {
-      this.titleMes = "GESTURE_DRAW";
-    }
-  }
-  ionViewDidEnter() {
-    if( this.hasGestureLock != false && this.hasGestureLock != true && !this.unregisterBackButton) {
-      // 打开app解锁，屏蔽
-      this.unregisterBackButton = this.platform.registerBackButtonAction(
-        () => {
-           
-        },
-      ); 
-    }
+    //     },
+    //   ); 
+    //   this.adminAppGestureLockObj.step = 2;
+    //   this.titleMes = "手势密码解锁";
+    // }
+
+    // if (this.adminAppGestureLockObj.step === 0) {
+    //   this.titleMes = "绘制解锁图案";
+    // }
   }
   //滑动结束后处理密码
   private dealPassword(selectedArray) {
@@ -158,57 +156,48 @@ export class GestureLockPage {
     this.titleMes_number = '';
     this.titleMes_supplement = '';
 
-    if (this.gestureLockObj.step === 2) {   /** 进入解锁 **/
-      if (this.checkPassword(selectedArray, this.gestureLockObj.password)) {  // 解锁成功
+    if (this.adminAppGestureLockObj.step === 2) {   /** 进入解锁 **/
+      if (this.checkPassword(selectedArray, this.adminAppGestureLockObj.password)) {  // 解锁成功
         // this.textColor = this.successColor;
-        this.titleMes = 'GESTURE_UNLOCK_SUCCESS';
+        this.titleMes = '解锁成功';
         // this.drawAll(this.successColor);
         this.drawAll(this.selectedColor);
-        this.storage.remove('gestureAttemptObj')
-        this.unregisterBackButton();
-        this.unregisterBackButton = undefined;
-        this.viewCtrl.dismiss()
+        this.storage.remove('adminAppGestureAttemptObj');
+        this.setPage(TabsPage);
+      
       } else {   //解锁失败
-        this.titleMes = 'GESTURE_UNLOCK_FAIL';
+        this.titleMes = '解锁失败';
         this.lockFaile(); 
       }
-    } else if (this.gestureLockObj.step === 1) {  // 设置密码确认密码
+    } else if (this.adminAppGestureLockObj.step === 1) {  // 设置密码确认密码
       if (this.checkPassword(selectedArray, this.firstPassword)) { //设置密码成功
-        this.gestureLockObj.step = 2;
-        this.gestureLockObj.password = this.firstPassword;
-        this.titleMes = 'GESTURE_SET_PASSWORD_SUCCESS';
-
-        this.storage.set('gestureLockObj', this.gestureLockObj).then( data => {
-          setTimeout( () => { 
-            this.navCtrl.pop({
-              animate: true,
-              direction: "back",
-              animation: "ios-transition",
-            })
-          },500)
-        });
-        this.drawAll(this.selectedColor);
-        
+        this.adminAppGestureLockObj.step = 2;
+        this.adminAppGestureLockObj.password = this.firstPassword;
+        this.titleMes = '手势密码设置成功';
+        this.textColor = this.settingColor;
+        this.storage.set('adminAppGestureLockObj', this.adminAppGestureLockObj)
+        this.drawAll(this.settingColor);
+        this.setPage(TabsPage);
       } else {  //设置密码失败
         this.textColor = this.errorColor;
-        this.titleMes = 'GESTURE_TWO_ERR';
+        this.titleMes = '两次不一致，重新设置';
         this.drawAll(this.errorColor);
-        this.gestureLockObj = new GestureLockObj();
+        this.adminAppGestureLockObj = new AdminAppGestureLockObj();
       }
-    } else if (this.gestureLockObj.step === 0) { //设置密码
+    } else if (this.adminAppGestureLockObj.step === 0) { //设置密码
       if(selectedArray.length < 3) {
-        this.titleMes = 'GESTURE_3_POINTS';
+        this.titleMes = '至少经过3个点';
         return ;
       }
-      this.gestureLockObj.step = 1;
+      this.adminAppGestureLockObj.step = 1;
       this.firstPassword = this.parsePassword(selectedArray);
       this.textColor = this.tipColor;
-      this.titleMes = 'GESTURE_DRAW_2';
-    } else if (this.gestureLockObj.step === 3) {//重置密码输入旧秘密
-      if (this.checkPassword(selectedArray, this.gestureLockObj.password)) {  // 旧密码成功
-        this.gestureLockObj.step = 0;
+      this.titleMes = '再次绘制解锁图案';
+    } else if (this.adminAppGestureLockObj.step === 3) {//重置密码输入旧秘密
+      if (this.checkPassword(selectedArray, this.adminAppGestureLockObj.password)) {  // 旧密码成功
+        this.adminAppGestureLockObj.step = 0;
         // this.textColor = this.selectedColor;
-        this.titleMes = 'GESTURE_NEW_PASSWORD';
+        this.titleMes = '请输入新手势密码';
         this.showDelete =this.hasGestureLock
         this.drawAll(this.selectedColor);
       } else {   //旧密码失败
@@ -221,17 +210,18 @@ export class GestureLockPage {
   lockFaile() {
     this.drawAll(this.errorColor);
     this.textColor = this.errorColor;
-    this.gestureAttemptObj.attemptsNu = this.gestureAttemptObj.attemptsNu - 1;
-    if (this.gestureAttemptObj.attemptsNu > 0) {
-      this.titleMes = `GESTURE_HAVE_CHANCES_1`;
-      this.titleMes_number = this.gestureAttemptObj.attemptsNu;
-      this.titleMes_supplement = 'GESTURE_HAVE_CHANCES_2';
+    this.adminAppGestureAttemptObj.attemptsNu = this.adminAppGestureAttemptObj.attemptsNu - 1;
+    if(!this.showReset) this.showReset = true;
+    if (this.adminAppGestureAttemptObj.attemptsNu > 0) {
+      this.titleMes = `密码错误，您还可以输入`;
+      this.titleMes_number = this.adminAppGestureAttemptObj.attemptsNu;
+      this.titleMes_supplement = '次';
     } else {
-      this.gestureAttemptObj.lockDate = Date.now();
-      this.storage.set("gestureAttemptObj", this.gestureAttemptObj);
-      this.titleMes = `GESTURE_60S_AGAIN_1`; 
+      this.adminAppGestureAttemptObj.lockDate = Date.now();
+      this.storage.set("adminAppGestureAttemptObj", this.adminAppGestureAttemptObj);
+      this.titleMes = `请在`; 
       this.titleMes_number = this.lockTime;
-      this.titleMes_supplement = 'GESTURE_60S_AGAIN_2';
+      this.titleMes_supplement = '秒后尝试';
       this.setInteralFun(this.lockTimeUnit);
     }
   }
@@ -240,14 +230,14 @@ export class GestureLockPage {
     this.lockTime = time;
     const interval = setInterval(() => {
       this.lockTime = this.lockTime - 1;
-      this.titleMes = `GESTURE_60S_AGAIN_1`; 
+      this.titleMes = `请在`; 
       this.titleMes_number = this.lockTime;
-      this.titleMes_supplement = 'GESTURE_60S_AGAIN_2';
+      this.titleMes_supplement = '秒后尝试';
       if (this.lockTime <= 0) {
-        this.gestureAttemptObj = new GestureAttemptObj();
-        this.storage.set("gestureAttemptObj", this.gestureAttemptObj);
+        this.adminAppGestureAttemptObj = new AdminAppGestureAttemptObj();
+        this.storage.set("adminAppGestureAttemptObj", this.adminAppGestureAttemptObj);
         this.lockTime = this.lockTimeUnit;
-        this.titleMes = "GESTURE_UNLOCK";
+        this.titleMes = "手势密码解锁";
         this.titleMes_number = '';
         this.titleMes_supplement = '';
         if(this.hasGestureLock) {
@@ -260,42 +250,48 @@ export class GestureLockPage {
 
   //重置手势密码
   resetPasswordFun() {
-    this.titleMes = 'GESTURE_OLD_PASSWORD';
-    this.gestureLockObj.step = 3;
+    this.titleMes = '请输入旧手势密码';
+    this.adminAppGestureLockObj.step = 3;
   }
   //删除手势密码
   deletPasswordFun() {
-    this.alterCtrl.create({
-      title: "手势密码",
-      message:"确定删除？",
-      buttons: [
-        {
-            text: "取消",
-            role: "cancel",
-            handler: () => {},
-        },
-        {
-            text: "确定",
-            handler: () => {
-              this.storage.remove("gestureLockObj");
-              this.gestureLockObj = new GestureLockObj();
-              // this.titleMes = 'GESTURE_PLEASE_SET_PASSWORD';
-              this.titleMes_number = '';
-              this.titleMes_supplement = '';
-              this.reset();
-              this.hasGestureLock = false;
-              setTimeout( () => {
-                this.navCtrl.pop({
-                  animate: true,
-                  direction: "back",
-                  animation: "ios-transition",
-                })
-              },300)
-            },
-        },
-    ],
-    }).present();
-   
+    // this.alterCtrl.create({
+    //   title: "手势密码",
+    //   message:"确定删除？",
+    //   buttons: [
+    //     {
+    //         text: "取消",
+    //         role: "cancel",
+    //         handler: () => {},
+    //     },
+    //     {
+    //         text: "确定",
+    //         handler: () => {
+    //           this.storage.remove("adminAppGestureLockObj");
+    //           this.adminAppGestureLockObj = new adminAppGestureLockObj();
+    //           // this.titleMes = 'GESTURE_PLEASE_SET_PASSWORD';
+    //           this.titleMes_number = '';
+    //           this.titleMes_supplement = '';
+    //           this.reset();
+    //           this.hasGestureLock = false;
+    //           setTimeout( () => {
+    //             this.navCtrl.pop({
+    //               animate: true,
+    //               direction: "back",
+    //               animation: "ios-transition",
+    //             })
+    //           },300)
+    //         },
+    //     },
+    // ],
+    // }).present();
+    this.storage.remove("adminAppGestureLockObj");
+    this.adminAppGestureLockObj = new AdminAppGestureLockObj();
+    // this.titleMes = 'GESTURE_PLEASE_SET_PASSWORD';
+    this.titleMes_number = '';
+    this.titleMes_supplement = '';
+    this.reset();
+    this.hasGestureLock = false;
   }
 
   //设置手势密码矩阵
@@ -310,7 +306,6 @@ export class GestureLockPage {
     this.selectedPointArray = [];
     this.allPointArray = [];
     this.unSelectedPointArray = [];
-    this.tipPoint = [];
     for (let i = 0; i < n; i++) {
       for (let j = 0; j < n; j++) {
         const obj = {
@@ -320,15 +315,11 @@ export class GestureLockPage {
         };
         this.allPointArray.push(obj);
         this.unSelectedPointArray.push(obj);
-        this.tipPoint.push({
-          value: obj,
-          select: false
-        });
       }
     }
   }
 
-//滑动手势的时候更新画布
+  //滑动手势的时候更新画布
   private update(nowPoint: Point) {
     this.drawAll(this.selectedColor, nowPoint);
     this.dealPoint(this.unSelectedPointArray, nowPoint);
@@ -364,7 +355,7 @@ export class GestureLockPage {
   private bindEvent() {
     this.render.listen(this.canvas.nativeElement, "touchstart", (e) => {
       e.preventDefault();
-      if (this.selectedPointArray.length === 0 && this.gestureAttemptObj.attemptsNu !== 0) {
+      if (this.selectedPointArray.length === 0 && this.adminAppGestureAttemptObj.attemptsNu !== 0) {
         this.dealPoint(this.allPointArray, this.getPosition(e), true);
       }
     });
@@ -403,13 +394,6 @@ export class GestureLockPage {
         }
         this.drawPoint(pointArry[i]);
         this.selectedPointArray.push(pointArry[i]);
-        // 顶部提示
-        for(let j = 0; j < this.tipPoint.length; j++) {
-          if( this.tipPoint[j].value.index == pointArry[i].index ) {
-            this.tipPoint[j].select = true;
-            break;
-          }
-        }
         this.unSelectedPointArray.splice(i, 1);
         break;
       }
@@ -431,7 +415,7 @@ export class GestureLockPage {
   //画圈
   private drawCircle(point: Point, style = this.unSelectedColor) {
     this.ctx.strokeStyle = style; 
-    this.ctx.lineWidth = 2;
+    this.ctx.lineWidth = this.circularLineWidth;
     this.ctx.beginPath();
     this.ctx.arc(point.x, point.y, this.radius, 0, Math.PI * 2, true);
     this.ctx.closePath();
@@ -445,7 +429,7 @@ export class GestureLockPage {
     this.ctx.arc(point.x, point.y, this.radius / 1.35, 0, Math.PI * 2, true);
     this.ctx.closePath();
     this.ctx.fill();
-    this.ctx.fillStyle = '#C1B17F';
+    this.ctx.fillStyle = this.centerColor;
     this.ctx.beginPath();
     this.ctx.arc(point.x, point.y, this.radius / 3.2, 0, Math.PI * 2, true);
     this.ctx.closePath();
@@ -456,7 +440,7 @@ export class GestureLockPage {
   private drawLine(pointArray: Point[], style, nowPoint: Point = null) {
     this.ctx.beginPath();
     this.ctx.strokeStyle = style;
-    this.ctx.lineWidth = 10;
+    this.ctx.lineWidth = this.lineWidth;
  
     this.ctx.moveTo(pointArray[0].x, pointArray[0].y);
     for (let i = 1; i < pointArray.length; i++) {
@@ -468,23 +452,22 @@ export class GestureLockPage {
     this.ctx.stroke();
     this.ctx.closePath();
   }
-  showLogin() {
-    this.unregisterBackButton();
-    this.unregisterBackButton = undefined;
-    this.events.publish(
-      "show login",
-      "login",
-      () => {
-        this.storage.remove('gestureAttemptObj');
-        this.viewCtrl.dismiss();
-      },
-    )
+  
+  
+  @GestureLockPage.willLeave
+  dissView() {
+  
   }
-  ionViewWillUnload() {
-    const _Fn = this.navParams.get('backFn');
-    if(_Fn) {
-      _Fn();
-    }
+
+  setPage(page) {
+    setTimeout(() => {
+      this.myapp.openPage(page, undefined, null);
+    }, 500);
+  }
+
+  forgetGestureLock() {
+    this.deletPasswordFun();
+    this.setPage(LoginPage);
   }
 }
 

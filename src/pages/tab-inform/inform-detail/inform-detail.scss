@@ -1,0 +1,30 @@
+page-inform-detail {
+    .scroll-content {
+        background-image: url('../assets/imgs/setting-bj.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+    .inform {
+        &-header {
+            margin-bottom: 26px;
+            position: relative;
+            &-title {
+                color: #68778b;
+                font-size: 1.7rem;
+                font-weight: 500;
+            }
+            &-date {
+                position: absolute;
+                font-size: 1.4rem;
+                color: #9cc9ec;
+                right: 0;
+                bottom: 0;
+            }
+        }
+        &-content {
+            color: #9ca8b7;
+            font-size: 1.5rem;
+        }
+    }
+}

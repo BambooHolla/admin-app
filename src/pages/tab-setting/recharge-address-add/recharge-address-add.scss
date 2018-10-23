@@ -1,0 +1,52 @@
+page-recharge-address-add {
+    ion-header {
+        ion-navbar {
+            position: relative;
+        }
+    }
+    .finish-address-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: color($colors, light-blue);
+        font-size: 1.6rem;
+    }
+
+    ion-content {
+        .scroll-content {
+            background-color: #f7f7f7;
+        }
+    }
+    
+    ion-item {
+        border-radius: 5px !important;
+        min-height: 4rem !important;
+        .item-inner {
+            color: #9cc9ec;
+            font-size: 1.6rem;
+        }
+        ion-avatar {
+            color: #586576;
+            position: relative;
+            picasso-icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%,-50%);
+                i {
+                    font-size: 3.2rem !important;
+                }
+            }
+        }
+    }
+    .item-label {
+        font-size: 1.5rem;
+        color: #9ca8b7;
+    }
+    .address-error {
+        padding-top: 8px;
+        padding-left: 12px;
+        color:  #fb7d7d;
+    }
+}

@@ -1,57 +1,77 @@
 page-gesture-lock {
-  z-index: 10001;
-  .tip-point {
-    width: 70px;
-    margin: 0 auto;
-    margin-bottom: 1.2rem;
-    div {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      background:rgba(193,177,127,1);
-      opacity:0.2;
-      border-radius: 50%;
-      margin-bottom: 14px;
-      &.select {
-        background-color: #C1B17F;
-        opacity:1;
+    z-index: 10001;
+    .scroll-content {
+        background-image: url('../assets/imgs/setting-bj.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+    }
+    .tip-point {
+      width: 70px;
+      margin: 0 auto;
+      margin-bottom: 1.2rem;
+      div {
+        display: inline-block;
+        width: 14px;
+        height: 14px;
+        background:rgba(193,177,127,1);
+        opacity:0.2;
+        border-radius: 50%;
+        margin-bottom: 14px;
+        &.select {
+          background-color: #C1B17F;
+          opacity:1;
+        }
+      }
+      div:nth-child(3n+2) {
+        margin-right: 14px;
+        margin-left: 14px;
+      }
+      div:nth-child(n+7) {
+        margin-bottom: 0px;
       }
     }
-    div:nth-child(3n+2) {
-      margin-right: 14px;
-      margin-left: 14px;
+    canvas{
+      display:block; 
+      width:100%; 
+      
+      margin: 0rem auto 0 auto;
     }
-    div:nth-child(n+7) {
-      margin-bottom: 0px;
+    .reset {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      font-size: 1.6rem;
+      transition-duration: 500ms;
+      padding-bottom: 5rem;
+      transform: scale(0) translateX(-50%);
+      &.show {
+        transform: scale(1) translateX(-50%);
+      }
+      a {
+        color: #000;
+      }
+    }
+    .gestureLockBox{
+      position: absolute;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+    }
+    .resetPasswordBox{
+      position: absolute;
+      right: 1rem;
+      bottom:1rem;
+    }
+    .gestureTip {
+        font-size: 2.4rem;
+        padding: 2.2rem 0;
+        color: #244b7f;
+        font-weight: 500;
+    }
+    .gestureTitle{
+      font-size: 1.6rem;
     }
   }
-  canvas{
-    display:block; 
-    width:100%; 
-    
-    margin: 0rem auto 0 auto;
-  }
-  .loginBox {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.4rem;
-    padding-bottom: 2rem;
-  }
-  .gestureLockBox{
-    position: absolute;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-  }
-  .resetPasswordBox{
-    position: absolute;
-    right: 1rem;
-    bottom:1rem;
-  }
-  .gestureTitle{
-    font-size: 1.4rem;
-  }
-}
+  

@@ -1,26 +1,30 @@
+<!--
+  Generated template for the GestureLockPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
 
 <ion-header>
 
 <ion-navbar>
-<ion-title>{{(hasGestureLock?"GESTURE_RESET_PASSWORD":hasGestureLock != true && hasGestureLock != false  ?'GESTURE':"GESTURE_SET_PASSWORD") | translate}}</ion-title>
+<ion-title></ion-title>
 </ion-navbar>
 
 </ion-header>
 <ion-content  scroll="false">
   <div class="gestureLockBox">
-      <div class="tip-point"> 
-          <div *ngFor="let tip of tipPoint" [class.select]='tip.select'>
-          </div>
-      </div>
-    <div  class="gestureTitle" text-center  [ngStyle]="{'color':textColor}">{{titleMes | translate}}{{titleMes_number}}{{titleMes_supplement | translate}}</div>
-    <!-- <a #resetPassword class="resetPasswordBox" (click)="resetPasswordFun()" *ngIf='hasGestureLock'>重置密码?</a> -->
-    <!-- <a #resetPassword  (click)="deletPasswordFun()">删除密码?</a> -->
+    <div text-center class="gestureTip">
+      {{titleTip}}
+    </div>
+    <div  class="gestureTitle" text-center  [ngStyle]="{'color':textColor}">{{titleMes}}{{titleMes_number}}{{titleMes_supplement}}</div>
+   
     
     <canvas #canvas [ngStyle]="{'height.px':height,'width.px':width}"></canvas>
-    <div class="loginBox">
-        <a #login  (click)="showLogin()" *ngIf="hasGestureLock != true && hasGestureLock != false">以账号登录方式解锁</a>
-        <a #login  (click)="deletPasswordFun()" *ngIf="showDelete">删除密码</a>
-    </div>
+    <div class="reset" [class.show]="showReset">
+      <a (click)="forgetGestureLock()">忘记手势密码</a>
+  </div>
   </div>
 
 </ion-content>
+  

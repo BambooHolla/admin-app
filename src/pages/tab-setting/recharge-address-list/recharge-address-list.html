@@ -1,0 +1,50 @@
+<!--
+  Generated template for the RechargeAddressListPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>充值地址本</ion-title>
+    <div class="add-address-btn" (click)="handlerAddAddress()">新增</div>
+  </ion-navbar>
+  <!-- 地址类型 -->
+
+  <div class="address-type">
+      <ion-grid>
+        <ion-row>
+          <ion-col *ngFor="let product of productList,let i = index" (click)="handlerSelectProduct(product,i)">
+            <span [class.select-product]="selectIndex == i">
+              {{product}}
+            </span>
+            <div class="bottom-line" [hidden]="selectIndex != i"></div>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+  </div>
+</ion-header>
+
+
+
+<ion-content>
+    <ion-list class="address-group">
+        <!-- <ion-item  >
+          
+        </ion-item> -->
+        <ion-item *ngFor="let item of selectAddress" class="address-item">
+            <div class="address-group">
+                <ion-avatar item-start class="product-logo">
+                  <img src="assets/imgs/{{selectProduct | lowercase}}-logo.png">
+                </ion-avatar>
+                <div>
+                    <h2>{{selectProduct}}充值地址</h2>
+                    <p>{{item?.address}}</p>
+                </div>
+              </div>
+              <picasso-icon name="picasso-disable" class="{{true?'disable':''}}" (click)="handlerAddressEnabled(product)"></picasso-icon>
+          </ion-item>
+      </ion-list>
+</ion-content>

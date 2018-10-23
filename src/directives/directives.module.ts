@@ -1,10 +1,8 @@
-import { NgModule } from "@angular/core";
-import { CopyDirective } from "./copy/copy";
-import { ScrollFixKeyboardDirective } from "./scroll-fix-keyboard/scroll-fix-keyboard";
-import { AutoFixedDirective } from "./auto-fixed/auto-fixed";
+import { NgModule } from '@angular/core';
+import { SetInputStatusDirective } from './set-input-status/set-input-status';
 @NgModule({
-    declarations: [CopyDirective, ScrollFixKeyboardDirective,AutoFixedDirective],
-    imports: [],
-    exports: [CopyDirective, ScrollFixKeyboardDirective,AutoFixedDirective],
+	declarations: [SetInputStatusDirective],
+	imports: [],
+	exports: [SetInputStatusDirective]
 })
 export class DirectivesModule {}

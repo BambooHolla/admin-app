@@ -1,158 +1,100 @@
 page-login {
-    background-image: url("../assets/images/login/bg-image.png");
-    background-size: cover;
-    background-position: center;
-    &::before {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(42, 43, 63, 0.88);
-        top: 0;
-        left: 0;
+    .scroll-content {
+        background-image: url('../assets/imgs/setting-bj.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
     }
-    &::after {
-        content: "";
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.2);
-        top: 0;
-        left: 0;
-    }
-    .dismiss {
-        position: absolute;
-        color: color($colors, special);
-        top: 2rem;
-        left: 6vw; //12.5(form-padding)*2/3 - 1rem~
-        padding: 1rem;
-        font-size: 1.4rem;
-    }
-    .login-warpper {
-        display: flex;
-        align-content: center;
-        justify-content: center;
-        flex-direction: column;
-        .logo-container {
-            height: 16.5vh;
-            margin-top: 13.5vh;
-            max-height: 150px;
-            display: flex;
-            justify-content: center;
-            img {
-                height: 100%;
-            }
+    .account-icon {
+        margin-top: 8vh;
+        margin-bottom: 1.4rem;
+        height: 6rem;
+        // background-color: rebeccapurple;
+        line-height: 6rem;
+        text-align: center;
+        background-image: url('../assets/imgs/login-icon-bj.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        margin-bottom: 1.4rem;
+        i {
+            font-size: 6rem;
+            color: #c6e6ff;
         }
-        .login-form-container {
-            padding: 5vh 12.5vw;
-            display: flex;
-            flex-direction: column;
-            .login-form-item {
-                background-color: rgba(0, 0, 0, 0.2);
-                border-radius: 0.4rem;
-                margin: 0.4rem 0 0.4rem;
-                padding: 0;
-                min-height: unset;
-                .item-inner {
-                    border-bottom: none;
+    }
+    .account-input-group {
+        padding: 1vh 12.5vw 5vh;
+    }
+    .account-input {
+        
+        margin-bottom: 1.2rem;
+        .account-label {
+            color: #9ca8b7;
+            font-size: 1.4rem;
+            margin-bottom: 0.2rem;
+        }
+        ion-item {
+            background-color: transparent;
+            min-height: 2.8rem !important;
+            border-bottom: 1px solid #e5e8eb;
+            .item-inner {
+                padding-right: 0 !important;
+                .input-wrapper {
+                    padding-bottom: 0.5rem;
                 }
-                input {
-                    padding: 0.8rem 0.6rem;
-                    font-size: 1.4rem;
-                    margin: 0.5rem;
-                    &::-webkit-input-placeholder {
-                        color: #6d6d6d;
-                        font-size: 1.3rem;
+                ion-thumbnail {
+                    margin: 0 !important;
+                    min-width: 0 !important;
+                    min-height: 0 !important;
+                    height: 100%;
+                    color: #9cc9ec;
+                    button {
+                        color: #9cc9ec;
+                        background-color: transparent;
+                        width: 100px;
+                        text-align: right;
+                        padding: 0;
+                        font-size: 14px;
                     }
-                }
-                .view-pwd-wrapper {
-                    background-color: transparent;
-                    width: 2.5rem !important;
-                    height: 3rem !important;
-                    padding: 0.5rem;
-                    box-sizing: border-box;
-                    display: inline-block;
-                    margin: 0;
-                    ion-icon {
-                        display: block;
-                        height: 100%;
-                        width: 100%;
-                    }
-                }
-                &.code-item {
-                    ion-thumbnail {
-                        min-width: auto !important;
-                        min-height: auto !important;
-                        width: 40%;
-                        .view-code {
-                            width: 100%;
-                            height: 100%;
+                    picasso-icon {
+                        margin: 0 !important;
+                        position: relative;
+                        bottom: 0.5rem;
+                        i {
+                            font-size: 3.2rem;
+                            position: relative;
+                            top: 2px;
                         }
                     }
-                }
-            }
-
-            .forget-password {
-                align-self: flex-end;
-                margin-right: 0.3rem;
-                color: #8b8b8b;
-                font-size: 1rem;
-            }
-            .login-form-submit {
-                border: 0.13rem solid #c1b17f;
-                border-radius: 0.3rem;
-                background-color: transparent;
-                color: #c1b17f; // font-weight: bolder;
-                font-size: 1.8rem;
-                padding: 1.8rem 0;
-                margin-top: 2.4rem;
-                transform: scale(1.02);
-                font-weight: 400;
-            }
-            .register-line {
-                margin-top: 1.2rem;
-                align-self: center;
-                position: relative;
-                .go-register {
-                    color: #c1b17f;
-                }
-                &::after,
-                &::before {
-                    content: "";
-                    height: 0.155rem;
-                    width: 0.155rem;
-                    background: #fff;
-                    border-radius: 50%;
-                    position: absolute;
-                    top: 50%;
-                }
-                &::before {
-                    left: -1rem;
-                }
-                &::after {
-                    right: -1rem;
+                    &.thumbnail-phone {
+                        line-height: 2.8rem !important;
+                        border-bottom-width: 0px;
+                        font-size: 1.5rem;
+                        text-align: center;
+                    }
                 }
             }
         }
-    }
-    // 表单校验的样式
-    ion-item {
-        &.input-has-value.ng-invalid:not(.input-has-focus) {
-            background-color: rgba(255, 0, 0, 0.2) !important;
-        }
-        &.input-has-focus {
-            box-shadow: 0 0 0.2rem rgba(255, 255, 255, 0.2);
+        ion-input {
+            input {
+                margin: 0 !important;
+                font-size: 1.6rem;
+
+            }
         }
     }
-
-    .content {
-        background-color: transparent;
+    
+    .account-sub-btn {
+        margin-top: 3.4rem;
+        button {
+            display: block;
+            width: 95%;
+            margin: 0 auto;
+            background-color: #8acafb;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 3px 3px 9px 0px #e0e0e0; 
+        }
     }
-}
-
-ion-icon[name="view-pwd"] {
-    background-image: url(../assets/images/login/view-pwd-icon.png);
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+    
 }

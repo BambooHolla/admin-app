@@ -1,0 +1,91 @@
+page-recharge-address-list {
+    .disable {
+        color: #fb8a8a !important;
+    }
+    .select-product {
+        color: #000 !important;
+        font-weight: 500 !important;
+    }
+    ion-header {
+        ion-navbar {
+            position: relative;
+        }
+    }
+    .add-address-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: color($colors, light-blue);
+        font-size: 1.6rem;
+    }
+    
+    .address-type {
+        border-top: 1px solid #f6f6f6;
+        box-shadow: 0px 15px 29px -3px #f6f6f6;
+        ion-grid {
+            padding: 0;
+        }
+        ion-col {
+            text-align: center;
+            font-size: 1.7rem;
+            position: relative;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            >span {
+                color: #68778b;
+                font-weight: 400;
+            }
+            .bottom-line {
+                max-width: 50.5px;
+                width: 40.4%;
+                height: 2.5px;
+                background-color: #000;
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+    }
+
+    ion-content {
+        >.scroll-content {
+            // padding-top: 20px;
+        }
+        .address-item {
+            > .item-inner {
+                border-bottom: 1px solid #eaeaec !important;
+                padding-top: 0.3rem;
+                padding-bottom: 0.3rem;
+                .ion-label {
+                    position: relative;
+                }
+            }
+            .address-group {
+                display: flex;
+                align-items: center;
+                >div {
+                    width: 80%;
+                    overflow: scroll;
+                }
+                h2 {
+                    margin-bottom: 6px;
+                }
+                p {
+                    font-size: 1.2rem;
+                }
+            }
+            picasso-icon {
+                position: absolute;
+                top: 50%;
+                right: 12px;
+                transform: translateY(-50%);
+                color: color($colors, gray-blue);
+                i {
+                    font-size: 1.8rem;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,60 @@
+page-fee-address-list {
+    ion-header {
+        ion-navbar {
+            position: relative;
+        }
+    }
+    .add-address-btn {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: color($colors, light-blue);
+        font-size: 1.6rem;
+        div {
+            display: inline-block;
+        }
+        div:first-child {
+            margin-right: 12px;
+        }
+    }
+    ion-content {
+        >.scroll-content {
+            // padding-top: 20px;
+        }
+        .address-item {
+            > .item-inner {
+                border-bottom: 1px solid #eaeaec !important;
+                padding-top: 0.3rem;
+                padding-bottom: 0.3rem;
+                .ion-label {
+                    position: relative;
+                }
+            }
+            .address-group {
+                display: flex;
+                align-items: center;
+                >div {
+                    width: 80%;
+                    overflow: scroll;
+                }
+                h2 {
+                    margin-bottom: 6px;
+                }
+                p {
+                    font-size: 1.2rem;
+                }
+            }
+            picasso-icon {
+                position: absolute;
+                top: 50%;
+                right: 12px;
+                transform: translateY(-50%);
+                color: color($colors, gray-blue);
+                i {
+                    font-size: 1.8rem;
+                }
+            }
+        }
+    }
+}
