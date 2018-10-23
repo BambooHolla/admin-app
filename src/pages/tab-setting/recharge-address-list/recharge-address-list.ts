@@ -19,10 +19,10 @@ export class RechargeAddressListPage extends SecondLevelPage {
   public selectIndex = 0;
   public selectAddress = [
     {
-
+      enable: true,
       address: "3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",
     }, {
-
+      enable: false,
       address: "3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",
     }, {
 

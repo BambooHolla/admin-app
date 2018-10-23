@@ -16,7 +16,7 @@ import { TabsPage } from '../../tabs/tabs';
   templateUrl: 'withdraw-address-add.html',
 })
 export class WithdrawAddressAddPage extends SecondLevelPage {
-  private withdrawAddressAddType:string;
+  private withdrawAddressAddType:string = "create";
   private isChangeBackground: boolean;
   private product;
   private pageStatus: string = "first";
@@ -33,7 +33,6 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     @Optional() public tabs: TabsPage,
   ) {
     super(navCtrl, navParams,true, tabs);
-    this.withdrawAddressAddType = "create";
   }
   @WithdrawAddressAddPage.willEnter
   init() {

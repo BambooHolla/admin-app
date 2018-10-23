@@ -4,20 +4,6 @@ page-remind-product-list {
         ion-navbar {
             position: relative;
         }
-        ion-title {
-            >div {
-                position: relative;
-                // overflow: hidden;
-                color: transparent!important;
-                div {
-                    color: color($colors, header-txt);
-                    position: absolute;
-                    top:0;
-                    left: 50%;
-                    transform: translateX(-50%)!important;
-                }
-            }
-        }
     }
     .handler-modify-btn {
         position: absolute;
@@ -41,10 +27,9 @@ page-remind-product-list {
     }
     .scroll-content {
         background-image: url('../assets/imgs/withdraw-bj-1.png');
-        background-size: 100% auto;
+        background-size: cover;
         background-repeat: no-repeat;
-        overflow-y: hidden;
-        background-position: bottom left;
+        background-position: center top;
         background-color: #f7f7f7;
     }
 

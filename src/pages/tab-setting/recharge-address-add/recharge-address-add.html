@@ -16,20 +16,20 @@
 
 <ion-content padding>
 
-  <div class="name-item">
-    <p class="item-label">地址名称</p>
+  <div class="address-item">
+    <div class="item-label">地址名称</div>
     <ion-item>
       <ion-input #nameInputer [(ngModel)]="_formData.name" placeholder="请输入地址名称"></ion-input>
     </ion-item>
   </div>
 
   <div class="address-item">
-    <p class="item-label">{{product}}</p>
+    <div class="item-label">{{product}}</div>
     <ion-item>
-        <ion-avatar item-end>
-            <picasso-icon name="picasso-scan"(click)="routeTo('page-address-scan',{auto_return:true,mode:'scan-only'})"></picasso-icon>
-          </ion-avatar>
       <ion-input #addressInputer [(ngModel)]="_formData.address" placeholder="请输入地址"></ion-input>
+      <ion-avatar item-end>
+        <picasso-icon name="picasso-scan"(click)="routeTo('page-address-scan',{auto_return:true,mode:'scan-only'})"></picasso-icon>
+      </ion-avatar>
     </ion-item>
     <div class="address-error">无效地址, 请重新输入</div>
   </div>

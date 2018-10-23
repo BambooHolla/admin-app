@@ -14,7 +14,6 @@ page-withdraw-address-list {
     .add-address-btn {
         position: absolute;
         right: 20px;
-        top: 50%;
         transform: translateY(-50%);
         color: color($colors, light-blue);
         font-size: 1.6rem;
@@ -68,18 +67,19 @@ page-withdraw-address-list {
                     position: relative;
                 }
             }
-            .address-group {
+            .item-group {
                 display: flex;
                 align-items: center;
                 >div {
-                    width: 80%;
-                    overflow: scroll;
+                    width: calc(100% - 72px);
                 }
                 h2 {
                     margin-bottom: 6px;
+                    overflow: scroll;
                 }
                 p {
                     font-size: 1.2rem;
+                    overflow: scroll;
                 }
             }
             picasso-icon {

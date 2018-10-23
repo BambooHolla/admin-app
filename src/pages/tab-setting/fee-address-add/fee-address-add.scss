@@ -9,27 +9,13 @@ page-fee-address-add {
         ion-navbar {
             position: relative;
         }
-        ion-title {
-            >div {
-                position: relative;
-                // overflow: hidden;
-                color: transparent!important;
-                div {
-                    color: color($colors, header-txt);
-                    position: absolute;
-                    top:0;
-                    left: 50%;
-                    transform: translateX(-50%)!important;
-                }
-            }
-        }
 
     }
   
     .handler-address-btn {
         position: absolute;
         right: 20px;
-        top: 50%;
+        // top: 50%;
         transform: translateY(-50%);
         color: color($colors, light-blue);
         font-size: 1.6rem;
@@ -37,10 +23,9 @@ page-fee-address-add {
 
     .scroll-content {
         background-image: url('../assets/imgs/withdraw-bj-1.png');
-        background-size: 100% auto;
+        background-size: cover;
         background-repeat: no-repeat;
-        overflow-y: hidden;
-        background-position: bottom left;
+        background-position: center top;
         background-color: #f7f7f7;
     }
     .change-background-img {
@@ -105,7 +90,7 @@ page-fee-address-add {
         height: 500px;
         margin: 0 auto;
         position: absolute;
-        top:25vh;
+        top: 20vh;
         left: 50%;
         transform: translateX(-50%);
         .create-first-number {
@@ -143,7 +128,7 @@ page-fee-address-add {
                 height: 60px;
                 text-align: center;
                 line-height: 60px;
-                // background-color: burlywood;
+                background-color: #fff;
                 border-radius: 50%;
                 // border: 1px solid #eaecf2;
                 box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.08);

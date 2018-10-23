@@ -39,13 +39,13 @@ export class RechargeAddressAddPage extends SecondLevelPage {
     this.event.on("job-finished", async ({ id, data }) => {
       console.log("job-finished", id, data);
       if(id === "page-address-scan" && data) {
-        this.formData.address = data;
+        this._formData.address = data;
       }
-    });
+    }); 
   }
 
   handlerFinishAddAddress() {
-    this.jobRes(this.formData);
+    this.jobRes(this._formData);
     this.finishJob();
   }
 

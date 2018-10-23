@@ -7,14 +7,34 @@ page-recharge-address-add {
     .finish-address-btn {
         position: absolute;
         right: 20px;
-        top: 50%;
+        // top: 50%;
         transform: translateY(-50%);
         color: color($colors, light-blue);
         font-size: 1.6rem;
     }
-
+    .address-item {
+        margin-bottom: 2rem;
+        .item-label {
+            font-size: 1.5rem;
+            color: #9ca8b7;
+            margin-bottom: 0.6rem;
+        }
+        ion-item {
+            box-shadow: 2px 2px 2px 0px #e0e0e0;
+        }
+        .address-error {
+            padding-top: 8px;
+            padding-left: 12px;
+            color:  #fb7d7d;
+            font-size: 1.4rem;
+        }
+    }
     ion-content {
         .scroll-content {
+            background-image: url('../assets/imgs/withdraw-bj-1.png');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
             background-color: #f7f7f7;
         }
     }
@@ -29,24 +49,17 @@ page-recharge-address-add {
         ion-avatar {
             color: #586576;
             position: relative;
+            margin: 0 !important;
             picasso-icon {
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%,-50%);
                 i {
-                    font-size: 3.2rem !important;
+                    font-size: 2.4rem !important;
                 }
             }
         }
     }
-    .item-label {
-        font-size: 1.5rem;
-        color: #9ca8b7;
-    }
-    .address-error {
-        padding-top: 8px;
-        padding-left: 12px;
-        color:  #fb7d7d;
-    }
+   
 }

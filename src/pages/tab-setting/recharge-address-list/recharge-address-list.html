@@ -23,7 +23,6 @@
           </ion-col>
         </ion-row>
       </ion-grid>
-    
   </div>
 </ion-header>
 
@@ -34,17 +33,17 @@
         <!-- <ion-item  >
           
         </ion-item> -->
-        <ion-item *ngFor="let item of selectAddress" class="address-item">
-            <div class="address-group">
+        <ion-item *ngFor="let address of selectAddress" class="address-item">
+            <div class="item-group">
                 <ion-avatar item-start class="product-logo">
                   <img src="assets/imgs/{{selectProduct | lowercase}}-logo.png">
                 </ion-avatar>
                 <div>
                     <h2>{{selectProduct}}充值地址</h2>
-                    <p>{{item?.address}}</p>
+                    <p>{{address?.address}}</p>
                 </div>
               </div>
-              <picasso-icon name="picasso-disable" class="{{true?'disable':''}}" (click)="handlerAddressEnabled(product)"></picasso-icon>
+              <picasso-icon name="picasso-disable" class="{{address.enable?'':'disable'}}" (click)="handlerAddressEnabled(product)"></picasso-icon>
           </ion-item>
       </ion-list>
 </ion-content>

@@ -106,6 +106,7 @@ export class TabAssetPage extends FirstLevelPage {
 
   @TabAssetPage.willEnter
   @asyncCtrlGenerator.loading()
+  @asyncCtrlGenerator.error("获取币种列表失败")
   async pageWillEnter() {
     this.statusBar.styleLightContent();
     this.menuCtrl.enable(true, "myMenu");

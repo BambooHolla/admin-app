@@ -55,7 +55,6 @@ export class ProductServiceProvider {
                     return 1;
                 }
 			});
-			debugger
             return data;
         });
     }

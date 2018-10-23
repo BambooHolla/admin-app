@@ -14,7 +14,7 @@ page-recharge-address-list {
     .add-address-btn {
         position: absolute;
         right: 20px;
-        top: 50%;
+        // top: 50%;
         transform: translateY(-50%);
         color: color($colors, light-blue);
         font-size: 1.6rem;
@@ -62,17 +62,18 @@ page-recharge-address-list {
                     position: relative;
                 }
             }
-            .address-group {
+            .item-group {
                 display: flex;
                 align-items: center;
                 >div {
-                    width: 80%;
-                    overflow: scroll;
+                    width: calc(100% - 72px);
                 }
                 h2 {
+                    overflow: scroll;
                     margin-bottom: 6px;
                 }
                 p {
+                    overflow: scroll;
                     font-size: 1.2rem;
                 }
             }

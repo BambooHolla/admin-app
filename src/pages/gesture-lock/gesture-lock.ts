@@ -57,6 +57,7 @@ export class GestureLockPage extends FirstLevelPage {
   errorColor = '#d54e20';
   tipColor = "#999999";
   lockTimeUnit = 60; //尝试失败后锁定多少秒
+  transitionTime = 500; // 解锁操作后，等待几毫秒
   adminAppGestureLockObj: AdminAppGestureLockObj = new AdminAppGestureLockObj(); //密码本地缓存
   adminAppGestureAttemptObj: AdminAppGestureAttemptObj = new AdminAppGestureAttemptObj();  //尝试日期和次数本地缓存
   showReset: boolean = false;
@@ -160,10 +161,10 @@ export class GestureLockPage extends FirstLevelPage {
       if (this.checkPassword(selectedArray, this.adminAppGestureLockObj.password)) {  // 解锁成功
         // this.textColor = this.successColor;
         this.titleMes = '解锁成功';
-        // this.drawAll(this.successColor);
+        // this.drawAll(this.successColor); 
+        this.setPage(TabsPage);
         this.drawAll(this.selectedColor);
         this.storage.remove('adminAppGestureAttemptObj');
-        this.setPage(TabsPage);
       
       } else {   //解锁失败
         this.titleMes = '解锁失败';
@@ -371,7 +372,7 @@ export class GestureLockPage extends FirstLevelPage {
         this.dealPassword(this.selectedPointArray);
         setTimeout(function () {
           self.reset();
-        }, 1000);
+        }, this.transitionTime);
       }
     });
   }

@@ -70,8 +70,9 @@
 
 .icon-picasso-asset:before { content: "\e721"; }
 
-.icon-jinyong1:before { content: "\e668"; }
+.icon-picasso-disable:before { content: "\e668"; }
 
+.icon-picasso-dialog-error:before { content: "\e668"; }
 .icon-picasso-account:before { content: "\e603"; }
 
 .icon-BTC:before { content: "\e613"; }

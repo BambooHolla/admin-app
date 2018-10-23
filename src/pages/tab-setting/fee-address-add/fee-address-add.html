@@ -7,11 +7,8 @@
 <ion-header [class.change-background-color]="isChangeBackground">
 
     <ion-navbar>
-      <ion-title  class="page-wrapper">
-        (占位)
-        <div class="first-step withdraw-title" [ngClass]='pageStatus'  *ngIf="withdrawAddressAddType == 'create'? true : false">生成数量</div>
-        <div class="second-step withdraw-title" [ngClass]='pageStatus'  *ngIf="withdrawAddressAddType == 'create'? true : false">新增矿工费地址</div>
-        <div class="first-step withdraw-title" *ngIf="withdrawAddressAddType == 'create'? false : true">新增矿工费地址</div>
+      <ion-title>
+        {{withdrawAddressAddType === "create" ? pageStatus === "first" ? "生成数量" : "新增矿工费地址" : "新增矿工费地址"}}
       </ion-title>
       <div class="handler-address-btn" (click)="handlerNextOrAdd()">{{pageStatus == "first" ? "下一步" : "完成"}}</div>
     </ion-navbar>
@@ -87,7 +84,7 @@
               </div>
               <div class="import-first">
                 <ion-item>
-                    <ion-textarea placeholder="请输入明文私钥"></ion-textarea>
+                    <ion-textarea></ion-textarea>
                 </ion-item>
               </div>
             </div>
