@@ -10,7 +10,14 @@
     <ion-title>
       {{withdrawAddressAddType === "create" ? pageStatus === "first" ? "生成数量" : "新增提现地址" : "新增提现地址"}}
     </ion-title>
-    <div class="handler-address-btn" (click)="handlerNextOrAdd()">{{pageStatus == "first" ? "下一步" : "完成"}}</div>
+    <div class="handler-address-btn" (click)="handlerNextOrAdd()" *ngIf="pageStatus === 'first'"
+      [class.disabled]="withdrawAddressAddType === 'create'? !(createAddressNumber > 0) : !imperInputValue">
+        下一步
+    </div>
+    <div class="handler-address-btn" (click)="handlerNextOrAdd()" *ngIf="pageStatus === 'second'"
+      [class.disabled]="!canSubmit">
+        完成
+    </div>
   </ion-navbar>
  
 
@@ -23,12 +30,12 @@
       <div class="page-wrapper">
         <div class="first-step" [ngClass]='pageStatus'>
           <div class="page-tip">
-            {{product}} 提现地址生成数量
+            {{product?.productName}} 提现地址生成数量
           </div>
           <div class="create-first">
             <div class="create-first-number">
               <ion-item>
-                  <ion-input type="number" max="100" min="0" step="1" [(ngModel)]="createAddressNumber"></ion-input>
+                  <ion-input #input type="number" max="100" min="0" step="1" [(ngModel)]="createAddressNumber" (ngModelChange)="handlerInputValueInt(input)"></ion-input>
               </ion-item>
             </div>
             <div class="create-first-number-btn">
@@ -44,31 +51,21 @@
         
         <div class="second-step" [ngClass]='pageStatus'>
           <div class="page-tip">
-            此次操作批量生成{{createPage.addressCount}}个{{product}}地址 
+            此次操作批量生成{{createAddressNumber}}个{{product?.productName}}地址 
           </div>
           <div class="second">
-            <div class="second-input">
+            <div class="second-input" *ngFor="let address of addressList,let i = index">
                 <div class="second-input-name">
                   <ion-item>
-                      <ion-input type="text"></ion-input>
+                      <ion-input type="text" [(ngModel)]="address.addressName" (ngModelChange)="changeInputEvent('name', address, i)"></ion-input>
                   </ion-item>
+                  <div class="error-tip">{{addressErrorList[i]?.name}}</div>
                 </div>
                 <div class="second-input-address">
                   <ion-item>
-                      <ion-input type="text" disabled></ion-input>
+                      <ion-input type="text" [(ngModel)]="address.rechargeWithdrawAddress" (ngModelChange)="changeInputEvent('address', address, i)"></ion-input>
                   </ion-item>
-                </div>
-            </div>
-            <div class="second-input">
-                <div class="second-input-name">
-                  <ion-item>
-                      <ion-input type="text"></ion-input>
-                  </ion-item>
-                </div>
-                <div class="second-input-address">
-                  <ion-item>
-                      <ion-input type="text"></ion-input>
-                  </ion-item>
+                  <div class="error-tip">{{addressErrorList[i]?.address}}</div>
                 </div>
             </div>
           </div>
@@ -84,7 +81,7 @@
             </div>
             <div class="import-first">
               <ion-item>
-                  <ion-textarea></ion-textarea>
+                  <ion-textarea [(ngModel)]="imperInputValue"></ion-textarea>
               </ion-item>
             </div>
           </div>
@@ -95,14 +92,18 @@
                   <div class="second-input-name">
                     <div class="input-label">地址名称</div>
                     <ion-item>
-                        <ion-input type="text"></ion-input>
+                        <ion-input type="text"  [(ngModel)]="imperAddress.addressName" 
+                        (ngModelChange)="changeInputEvent('name', imperAddress, undefined)"></ion-input>
                     </ion-item>
+                    <div class="error-tip">{{importErrors?.name}}</div>
                   </div>
                   <div class="second-input-address">
                     <div class="input-label">地址</div>
                     <ion-item>
-                        <ion-input type="text" disabled></ion-input>
+                      <ion-input type="text" [(ngModel)]="imperAddress.rechargeWithdrawAddress" 
+                      (ngModelChange)="changeInputEvent('address', imperAddress, undefined)"></ion-input>
                     </ion-item>
+                    <div class="error-tip">{{importErrors?.address}}</div>
                   </div>
               </div>
             </div>

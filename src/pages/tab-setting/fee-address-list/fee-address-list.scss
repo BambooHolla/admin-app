@@ -4,6 +4,14 @@ page-fee-address-list {
             position: relative;
         }
     }
+    .tip {
+        text-align: center;
+        line-height: 10rem;
+        font-size: 2.2rem;
+        color: #68778b;
+        font-weight: 500;
+        text-shadow: 4px 4px 2px #e0e0e0;
+    }
     .add-address-btn {
         position: absolute;
         right: 20px;

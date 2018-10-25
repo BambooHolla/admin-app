@@ -8,7 +8,7 @@
 
   <ion-navbar>
     <ion-title>新增充值地址</ion-title>
-    <div class="finish-address-btn" (click)="handlerFinishAddAddress()">完成</div>
+    <div class="finish-address-btn" (click)="canSubmit && finishAddAddress()" [class.disabled]="!canSubmit">完成</div>
   </ion-navbar>
 
 </ion-header>
@@ -19,19 +19,22 @@
   <div class="address-item">
     <div class="item-label">地址名称</div>
     <ion-item>
-      <ion-input #nameInputer [(ngModel)]="_formData.name" placeholder="请输入地址名称"></ion-input>
+      <ion-input #nameInput class="input-group" [(ngModel)]="formData.addressName" 
+      placeholder="请输入地址名称" (ngModelChange)="changeInputEvent('name', nameInput.value)"></ion-input>
     </ion-item>
+    <div class="address-error">{{errors?.name}}</div>
   </div>
 
   <div class="address-item">
-    <div class="item-label">{{product}}</div>
+    <div class="item-label">{{product?.productName}}</div>
     <ion-item>
-      <ion-input #addressInputer [(ngModel)]="_formData.address" placeholder="请输入地址"></ion-input>
+      <ion-input #addressInput class="input-group" [(ngModel)]="formData.address" 
+      placeholder="请输入地址" (ngModelChange)="changeInputEvent('address', addressInput.value)"></ion-input>
       <ion-avatar item-end>
         <picasso-icon name="picasso-scan"(click)="routeTo('page-address-scan',{auto_return:true,mode:'scan-only'})"></picasso-icon>
       </ion-avatar>
     </ion-item>
-    <div class="address-error">无效地址, 请重新输入</div>
+    <div class="address-error">{{errors?.address}}</div>
   </div>
 
 </ion-content>

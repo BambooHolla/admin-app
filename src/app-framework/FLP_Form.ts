@@ -25,7 +25,17 @@ export class FLP_Form extends FLP_Route {
         if(inputDom.value && inputDom.value.length > length) {
            inputDom.value = inputDom.value.substr(0,length);
         }
-   }
+    }
+    handlerInputValueInt(inputDom: any) {
+        if(inputDom.value) {
+            const _index = inputDom.value.indexOf('.');
+            let _value = inputDom.value;
+            inputDom.value = +_value >= 0 ? String(_value) : "0";
+            if(_index >= 0) {
+                inputDom.value =  _value.substr(0, _index)
+            }
+        }
+    }
     checkFormKey(formKey: string) {
         if (this._error_checks_col[formKey]) {
           this._error_checks_col[formKey].forEach(fun_key => {

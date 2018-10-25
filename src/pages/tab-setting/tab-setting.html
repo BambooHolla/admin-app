@@ -19,6 +19,10 @@
     <ion-item class="message">
         充值提现服务配置
     </ion-item>
+    <ion-item  class="setting-type" (click)="askInitKey()">
+      <picasso-icon name="picasso-secret-key" class="icon"></picasso-icon>  
+      初始化管理员密钥
+    </ion-item>
     <ion-item *ngFor="let type of setting_list" class="setting-type" (click)="routeTo(type?.path)">
       <picasso-icon [name]="type?.icon" class="icon"></picasso-icon>  
       {{type?.name}}

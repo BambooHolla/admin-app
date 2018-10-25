@@ -11,9 +11,12 @@ page-recharge-address-add {
         transform: translateY(-50%);
         color: color($colors, light-blue);
         font-size: 1.6rem;
+        &.disabled {
+            color: #9ca8b7;
+        }
     }
     .address-item {
-        margin-bottom: 2rem;
+        margin-bottom: 0.2rem;
         .item-label {
             font-size: 1.5rem;
             color: #9ca8b7;
@@ -27,6 +30,7 @@ page-recharge-address-add {
             padding-left: 12px;
             color:  #fb7d7d;
             font-size: 1.4rem;
+            height: 2.2rem;
         }
     }
     ion-content {

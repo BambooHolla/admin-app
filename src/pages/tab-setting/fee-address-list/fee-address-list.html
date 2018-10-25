@@ -17,21 +17,21 @@
 </ion-header>
 
 <ion-content>
+    <div *ngIf="!feeAddressList || feeAddressList.length == 0" class="tip">
+        暂无数据  
+    </div>
     <ion-list class="address-group">
-        <!-- <ion-item  >
-          
-        </ion-item> -->
-        <ion-item *ngFor="let item of feeAddress" class="address-item">
+        <ion-item *ngFor="let address of feeAddressList" class="address-item">
             <div class="item-group">
                 <ion-avatar item-start class="product-logo">
-                  <img src="assets/imgs/usdt-logo.png">
+                    <img src="assets/imgs/btc-logo.png">
                 </ion-avatar>
                 <div>
-                    <h2>USDT矿工费地址</h2>
-                    <p>BTC: {{item?.address}}</p>
+                    <h2>{{address?.addressName || "USDT矿工费地址"}}</h2>
+                    <p>{{address?.rechargeWithdrawAddress}}</p>
                 </div>
-              </div>
-              <picasso-icon name="picasso-disable" class="{{true?'disable':''}}"></picasso-icon>
-          </ion-item>
-      </ion-list>
+            </div>
+            <picasso-icon name="picasso-disable" class="{{true?'disable':''}}"></picasso-icon>
+        </ion-item>
+    </ion-list>
 </ion-content>

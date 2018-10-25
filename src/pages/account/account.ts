@@ -16,7 +16,7 @@ import { File, Entry } from '@ionic-native/file';
 })
 export class AccountPage extends SecondLevelPage {
   private readonly DIR_ROOT_PATH: string = this.file.externalRootDirectory;
-  private readonly DIR_NAME: string = "PicassoAddressKey";
+  private readonly DIR_NAME: string = "Picasso";
   private readonly FILE_PATH: string = this.DIR_ROOT_PATH + `/${this.DIR_NAME}`;
   private readonly FILE_NAME: string = "picassoAddressKey.txt";
   value: string = '1';

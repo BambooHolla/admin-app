@@ -13,10 +13,10 @@ import { AppFetchProvider } from '../app-fetch/app-fetch';
 export class InformServiceProvider extends CommonService {
 
 	constructor(
-		public appFetch: AppFetchProvider,
+		public fetch: AppFetchProvider,
 	) {
 		super();
-		this.appFetch.on("io@data",this.getInforms.bind(this))
+		this.fetch.on("io@data",this.getInforms.bind(this))
 		
 
 	}

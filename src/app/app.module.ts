@@ -53,6 +53,8 @@ import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { UserInfoProvider } from '../providers/user-info/user-info';
 import { ProductServiceProvider } from '../providers/product-service/product-service';
 import { InformServiceProvider } from '../providers/inform-service/inform-service';
+import { AddressServiceProvider } from '../providers/address-service/address-service';
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
@@ -100,6 +102,7 @@ const providers = [
   UserInfoProvider,
   ProductServiceProvider,
   InformServiceProvider,
+  AddressServiceProvider,
 ];
 @NgModule({
   declarations: [
@@ -164,6 +167,7 @@ const providers = [
     UserInfoProvider,
     ProductServiceProvider,
     InformServiceProvider,
+    AddressServiceProvider,
   ]
 })
 export class AppModule {

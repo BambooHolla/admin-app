@@ -43,8 +43,8 @@ export class GestureLockPage extends FirstLevelPage {
   width = Math.floor((window.innerWidth)) || 320;
   chooseType = 3;
   devicePixelRatio; // 设备密度
-  titleTip = "设置手势密码";
-  titleMes = "绘制解锁图案";
+  titleTip = "手势密码";
+  titleMes = "手势密码解锁";
   titleMes_supplement = '';
   titleMes_number:any = '';
   unSelectedColor = '#a0ccee';
@@ -91,7 +91,7 @@ export class GestureLockPage extends FirstLevelPage {
     super(navCtrl, navParams);
   }
 
-  @GestureLockPage.onInit
+  @GestureLockPage.willEnter
   async init() {
     this.height = this.width = this.height > this.width ? this.width : this.height;
     this.devicePixelRatio = window.devicePixelRatio || 1;

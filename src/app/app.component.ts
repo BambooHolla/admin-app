@@ -87,7 +87,7 @@ export class MyApp extends EventEmitter {
     window["userInfo"] = userInfo;
     window["productService"] = productService;
     window["InformService"] = InformService;
-   
+    productService.getExchangeRate()
     if (!navigator["clipboard"]) {
       navigator["clipboard"] = {
           writeText: text => clipboard.copy(text),
@@ -119,12 +119,13 @@ export class MyApp extends EventEmitter {
   }
   
   appInit() {
-	// push推送, 只适合android
-	if(this.isAndroid) {
-		this.jPush.init();
-		this.jPush.setDebugMode(true);
-	}
+    // push推送, 只适合android
+    if(this.isAndroid) {
+      this.jPush.init();
+      this.jPush.setDebugMode(true);
+    }
 
+    this.productService.init();
     // 监听token过期
     this.appSetting.on("token@expire", () => {
       this.openPage(LoginPage);

@@ -8,7 +8,7 @@
 
   <ion-navbar>
     <ion-title>充值地址本</ion-title>
-    <div class="add-address-btn" (click)="handlerAddAddress()">新增</div>
+    <div class="add-address-btn" (click)="askAddAddressType()">新增</div>
   </ion-navbar>
   <!-- 地址类型 -->
 
@@ -17,7 +17,7 @@
         <ion-row>
           <ion-col *ngFor="let product of productList,let i = index" (click)="handlerSelectProduct(product,i)">
             <span [class.select-product]="selectIndex == i">
-              {{product}}
+              {{product?.productName}}
             </span>
             <div class="bottom-line" [hidden]="selectIndex != i"></div>
           </ion-col>
@@ -29,21 +29,21 @@
 
 
 <ion-content>
-    <ion-list class="address-group">
-        <!-- <ion-item  >
-          
-        </ion-item> -->
-        <ion-item *ngFor="let address of selectAddress" class="address-item">
-            <div class="item-group">
-                <ion-avatar item-start class="product-logo">
-                  <img src="assets/imgs/{{selectProduct | lowercase}}-logo.png">
-                </ion-avatar>
-                <div>
-                    <h2>{{selectProduct}}充值地址</h2>
-                    <p>{{address?.address}}</p>
-                </div>
-              </div>
-              <picasso-icon name="picasso-disable" class="{{address.enable?'':'disable'}}" (click)="handlerAddressEnabled(product)"></picasso-icon>
-          </ion-item>
-      </ion-list>
+  <div *ngIf="!selectAddressList || selectAddressList.length == 0" class="tip">
+    暂无数据  
+  </div>
+  <ion-list class="address-group">
+    <ion-item *ngFor="let address of selectAddressList" class="address-item">
+      <div class="item-group">
+        <ion-avatar item-start class="product-logo">
+          <img src="assets/imgs/{{selectProduct?.productName | lowercase}}-logo.png">
+        </ion-avatar>
+        <div>
+            <h2>{{address?.addressName || (selectProduct?.productName + "充值地址")}}</h2>
+            <p>{{address?.rechargeWithdrawAddress}}</p>
+        </div>
+      </div>
+      <picasso-icon name="picasso-disable" class="{{address?.addressClass == '0'?'':'disable'}}" (click)="askAddressEnabled(address)"></picasso-icon>
+    </ion-item>
+  </ion-list>
 </ion-content>

@@ -97,10 +97,7 @@ export class TabAssetPage extends FirstLevelPage {
       
     this.appSetting = undefined;
   }
-  async ngOnInit() {
  
-
-  }
 
   productList: ProductModel[] = [];
 

@@ -1,7 +1,11 @@
 import { Component, Optional } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { SecondLevelPage } from '../../../app-framework/SecondLevelPage';
 import { TabsPage } from '../../tabs/tabs';
+import { asyncCtrlGenerator } from '../../../app-framework/Decorator';
+import { AddressServiceProvider, AddressUse, AddressModel } from '../../../providers/address-service/address-service';
+import { ProductModel } from '../../../providers/product-service/product-service';
+import { Subscription, BehaviorSubject } from 'rxjs';
 
 /**
  * Generated class for the WithdrawAddressAddPage page.
@@ -16,38 +20,219 @@ import { TabsPage } from '../../tabs/tabs';
   templateUrl: 'withdraw-address-add.html',
 })
 export class WithdrawAddressAddPage extends SecondLevelPage {
+  // 页面显示状态
   private withdrawAddressAddType:string = "create";
   private isChangeBackground: boolean;
-  private product;
+  private product: ProductModel;
   private pageStatus: string = "first";
+  
 
-  private createAddressNumber: number = undefined;
+ 
+  // 导入情况下
+  private imperInputValue:string;
+  private imperAddress: AddressModel = {
+    addressName: '',
+    rechargeWithdrawAddress: '',
+  };
+  private importErrors = {};
 
-  private createPage = {
-    addressCount: 0,
-  }
+  // 创建情况下
+  private addressList: AddressModel[] = [];
+  private addressErrorList: {address: string, name: string}[];
+  private addressErrorIndex: number[] = [];
+  private createAddressNumber: number | string = undefined;
+  private validAddressNumber: number = 0;
+
+
+  private observable$: Subscription;
+  private observable = new BehaviorSubject<{type: string, addressInfo: AddressModel, index: number, withdrawType: string}>(undefined);
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
+    public viewCtrl: ViewController,
     @Optional() public tabs: TabsPage,
+    public addressService: AddressServiceProvider,
   ) {
     super(navCtrl, navParams,true, tabs);
+    this.init();
   }
-  @WithdrawAddressAddPage.willEnter
+  
   init() {
     const _withdrawType = this.navParams.data.type;
     this.product = this.navParams.data.product;
     this.withdrawAddressAddType = _withdrawType;
     this.isChangeBackground = _withdrawType == "create"? true : false;
+
+
+    this.observable$ = this.observable
+    .debounceTime(250)
+    .subscribe(data => {
+        if(data) {
+          this.checkAddressContent(data);
+        }
+    });
   }
  
-
+ 
   handlerNextOrAdd() {
-    this.pageStatus = "second";
-    if(this.isChangeBackground) {
-      this.isChangeBackground = false;
+    if(this.withdrawAddressAddType === "create") {
+      if(this.pageStatus === "first" && this.createAddressNumber > 0) {
+        this.createAddressList()
+      } else if(this.pageStatus === "second" && this.canSubmit) {
+        this.tipAddAddressLsit();
+      }
+    } else if(this.withdrawAddressAddType === "import") {
+      if(this.pageStatus === "first" && this.imperInputValue) {
+        this.importAddressKey()
+      } else if(this.pageStatus === "second" && this.canSubmit) {
+        this.addAddressList("import");
+      }
     }
+     
+  }
+
+  @asyncCtrlGenerator.loading()
+  @asyncCtrlGenerator.error("生成地址失败")
+  createAddressList() {
+    return this.addressService.createWFAddressList(
+      this.product.productHouseId,
+      AddressUse.Withdraw,
+      +this.createAddressNumber
+    ).then(addressList => {
+        const _arr = [];
+        for(let i = 0; i < addressList.length; i++) {
+          _arr.push({});
+          this.checkAddressContent({
+            type: "name",
+            addressInfo: addressList[i],
+            index: i,
+            withdrawType: "create"
+          })
+        }
+        this.addressErrorList = [].concat(_arr);
+        this.addressList = addressList;
+        this.isChangeBackground = false;
+        this.pageStatus = "second";
+    });
+  }
+
+  @asyncCtrlGenerator.loading()
+  @asyncCtrlGenerator.error("导入地址失败")
+  importAddressKey() {
+    return this.addressService.importAddressKey(
+      this.product.productHouseId,
+      this.imperInputValue,
+    ).then(address => {
+      this.pageStatus = "second";
+      this.imperAddress = Object.assign(this.imperAddress, address[0]);
+          this.checkAddressContent({
+          type: "name",
+          addressInfo: this.imperAddress,
+          index: undefined,
+          withdrawType: "import"
+      });
+    });
+  }
+
+
+  tipAddAddressLsit() {
+    this.alertCtrl.create({
+      title: "警告",
+      subTitle: `校验通过${this.validAddressNumber}个地址`,
+      message: "是否新增这些地址",
+      buttons: [
+        {
+          text: "取消",
+        },
+        {
+          text: "确定",
+          handler: () => {
+            this.addAddressList("create");
+          }
+        }
+      ]
+    }).present();
+  }
+
+  @asyncCtrlGenerator.loading()
+  @asyncCtrlGenerator.success("新增地址成功")
+  @asyncCtrlGenerator.error("新增地址失败")
+  addAddressList(withdrawType: string) {
+    let _addressList: AddressModel[] = [].concat(
+      withdrawType === "create" ? this.addressList : this.imperAddress
+    );
+    if(withdrawType === "create") {
+      for(let index of this.addressErrorIndex) {
+        _addressList.splice(index, 1);
+      }
+    }
+    return this.addressService.saveBatchAddressList(_addressList).then(data => {
+      if(data.length) this.finishPage()
+    })
+  }
+
+  /**
+   * 批量生成,只有校验失败的数量跟生成数量相等.才无法提交
+   */
+  get canSubmit() {
+    if(this.withdrawAddressAddType === "create") {
+      let _errorNumer = 0;
+      this.addressErrorList.forEach(error => {
+        for(let k in error) {
+          _errorNumer++;
+          break;
+        }
+      });
+      this.validAddressNumber = +this.createAddressNumber - _errorNumer;
+      if(_errorNumer == this.createAddressNumber) return false;
+      
+      return true;
+    } else if(this.withdrawAddressAddType === "import") {
+      for (var k in this.importErrors) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  changeInputEvent(type: string, addressInfo: AddressModel, index: number) {
+    const withdrawType = this.withdrawAddressAddType;
+    if(type === "name") {
+      addressInfo.addressName = addressInfo.addressName.trim();
+    } else {
+      addressInfo.rechargeWithdrawAddress = addressInfo.rechargeWithdrawAddress.replace(/\s/g,"");
+    }
+    if(addressInfo) this.observable.next({type, addressInfo, index, withdrawType});
+  }
+
+  checkAddressContent(data: {type: string, addressInfo: AddressModel, index: number, withdrawType: string}) {
+    const { productHouseId } = this.product;
+    const {type, addressInfo, index, withdrawType} = data;
+    let checkPromise: any;
+    if(type === "name") {
+      checkPromise = this.addressService.checkAddressName(productHouseId, addressInfo.addressName);
+    } else if(type === "address") {
+      checkPromise = this.addressService.checkAddress(productHouseId, addressInfo.rechargeWithdrawAddress);
+    }
+    return checkPromise.then(status => {
+      if(withdrawType === "create") {
+        delete this.addressErrorList[index][type]
+        const _index = this.addressErrorIndex.indexOf(+index);
+        _index >= 0 && this.addressErrorIndex.splice(_index, 1);
+      } else if(withdrawType === "import") {
+        delete this.importErrors[type];
+      }
+
+    }).catch(error => {
+      if(withdrawType === "create") {
+        this.addressErrorList[index][type] =  error.MESSAGE || error;
+        this.addressErrorIndex.push(+index);
+      } else if(withdrawType === "import") {
+        this.importErrors[type] = error.MESSAGE || error;
+      }
+    })
   }
 
   handlerAddressNumberInput(type: string) {
@@ -62,4 +247,16 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
       this.createAddressNumber = _number < 0 ? 0 : _number;
     }
   }
+
+  
+  finishPage() {
+    this.jobRes({productHouseId: this.product.productHouseId,});
+    this.finishJob();
+  }
+
+  @WithdrawAddressAddPage.onDestory
+  pageDestory() {
+    this.observable$.unsubscribe();
+  }
+
 }

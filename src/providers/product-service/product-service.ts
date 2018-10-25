@@ -11,21 +11,26 @@ import { AppFetchProvider } from '../app-fetch/app-fetch';
 */
 @Injectable()
 export class ProductServiceProvider {
-	readonly GET_PRODUCTS = this.appSetting.APP_URL("/product/product");
+    // 获取币种列表
+    readonly GET_PRODUCTLIST = this.appSetting.APP_URL("/product/product");
+    // 获取法币汇率
+    readonly GET_EXCHANGE_RATE = this.appSetting.APP_URL("/report/exchangeRate");
+
 	constructor(
 		public appSetting: AppSettingProvider,
 		public fetch: AppFetchProvider,
 	) {
         console.log('Hello AccountServiceProvider Provider');
-       
 	}
 
+    init() {
+        this.getExchangeRate();
+    }
   	productList: AsyncBehaviorSubject<ProductModel[]>;
 	@TB_AB_Generator("productList") 
 	productList_Executor(promise_pro) { 
 		return promise_pro.follow(this.getProducts(0, 30));
 	}
-
 	getProducts(
         page: number,
         pageSize: number = 10,
@@ -34,7 +39,7 @@ export class ProductServiceProvider {
         productName?: string,
         productIdArr?: string,
     ) {
-        return this.fetch.post<ProductModel[]>(this.GET_PRODUCTS, {
+        return this.fetch.post<ProductModel[]>(this.GET_PRODUCTLIST, {
             page,
             pageSize,
             productType,
@@ -56,6 +61,40 @@ export class ProductServiceProvider {
                 }
 			});
             return data;
+        });
+    }
+
+    private _exchangeRate: RxchangeRateModel = {
+        currencyFrom: "",
+        currencyTo: "",
+        currencyToSymbol: "",
+        exchange: "--",
+    };
+    private _getExchangeRateIng: boolean = false;
+    get exchangeRate():RxchangeRateModel {
+        if(this._exchangeRate == undefined || this._exchangeRate.exchange === "--" && !this._getExchangeRateIng) {
+            this.getExchangeRate();
+        }
+        return this._exchangeRate;
+    }
+    getExchangeRate(countryCode: string = "zh") {
+        this._getExchangeRateIng = true;
+        return this.fetch.get<RxchangeRateModel>(
+            this.GET_EXCHANGE_RATE,
+            {
+                search: {
+                    countryCode
+                }
+            },
+            true
+        ).catch( err => err = {
+            currencyFrom: "",
+            currencyTo: "",
+            currencyToSymbol: "",
+            exchange: "--",
+        }).then(data => {
+            this._exchangeRate = data;
+            this._getExchangeRateIng = false;
         });
     }
 
@@ -98,4 +137,11 @@ export enum ProductStatus {
     "suspension" = "001", //"已下架/停牌",
     "tradable" = "002", //"已上架/可交易",
     "others" = "999", //"其他"
+}
+
+export type RxchangeRateModel = {
+    currencyFrom: string;
+    currencyTo: string;
+    currencyToSymbol: string;
+    exchange: string | number;
 }
