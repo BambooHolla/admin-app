@@ -19,6 +19,9 @@ page-fee-address-add {
         transform: translateY(-50%);
         color: color($colors, light-blue);
         font-size: 1.6rem;
+        &.disabled {
+            color: #9ca8b7;
+        }
     }
 
     .scroll-content {
@@ -183,6 +186,12 @@ page-fee-address-add {
                 color: #9ca8b7;
                 margin-bottom: 8px;
                 font-size: 1.5rem;
+            }
+            .error-tip {
+                padding-top: 4px;
+                padding-left: 16px;
+                color: #fb7d7d;
+                font-size: 1.4rem;
             }
         }
     }

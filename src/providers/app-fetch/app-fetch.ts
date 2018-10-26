@@ -44,7 +44,7 @@ export class AppFetchProvider extends CommonService {
     
     constructor(
         public http: Http,
-        // public appSettin: AppSettingProvider,
+        public appSetting: AppSettingProvider,
         // public translateService: TranslateService,
         public user: UserInfoProvider,
     ) {
@@ -113,6 +113,7 @@ export class AppFetchProvider extends CommonService {
         headers.append("x-bnqkl-platform", AppSettingProvider.PLATFORM_TYPE);
         if(!no_token) {
             headers.append("x-auth-token", this.user.userToken);
+            this.appSetting.refreshTokenExpiredTime();
         }
         const params = options.params as { [key: string]: any };
         if(params && params.constructor === Object) {
@@ -150,7 +151,6 @@ export class AppFetchProvider extends CommonService {
                 req = this.http[method](reqInfo.url, body, reqInfo.options);
                 break;
         }
-        // debugger;
         var req_promise = req.then instanceof Function ? req : req.toPromise();
         
         return this._handlePromise(req_promise);
@@ -162,10 +162,16 @@ export class AppFetchProvider extends CommonService {
     private _handleResCatch(res) {
         const data = res.json instanceof Function ? res.json() : res;
         const error = data.message ? data : data.error;
+       
         if(error) {
             let { message: err_message, code: error_code } = error;
             if (typeof error === "string") {
                 err_message = error;
+            }
+            if(+error_code == -1) {
+                // token失效
+                this.appSetting.emit("token@expire",this.user.userToken);
+                this.appSetting.clearUserToken();
             }
             throw ServerResError.parseErrorMessage(
                 error_code,

@@ -21,7 +21,7 @@ import { Subscription, BehaviorSubject } from 'rxjs';
 })
 export class WithdrawAddressAddPage extends SecondLevelPage {
   // 页面显示状态
-  private withdrawAddressAddType:string = "create";
+  private pageType:string = "create";
   private isChangeBackground: boolean;
   private product: ProductModel;
   private pageStatus: string = "first";
@@ -39,7 +39,7 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
   // 创建情况下
   private addressList: AddressModel[] = [];
   private addressErrorList: {address: string, name: string}[];
-  private addressErrorIndex: number[] = [];
+  // private addressErrorIndex: number[] = [];
   private createAddressNumber: number | string = undefined;
   private validAddressNumber: number = 0;
 
@@ -59,10 +59,10 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
   }
   
   init() {
-    const _withdrawType = this.navParams.data.type;
+    const _pageType = this.navParams.data.type;
     this.product = this.navParams.data.product;
-    this.withdrawAddressAddType = _withdrawType;
-    this.isChangeBackground = _withdrawType == "create"? true : false;
+    this.pageType = _pageType;
+    this.isChangeBackground = _pageType == "create"? true : false;
 
 
     this.observable$ = this.observable
@@ -76,13 +76,13 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
  
  
   handlerNextOrAdd() {
-    if(this.withdrawAddressAddType === "create") {
+    if(this.pageType === "create") {
       if(this.pageStatus === "first" && this.createAddressNumber > 0) {
         this.createAddressList()
       } else if(this.pageStatus === "second" && this.canSubmit) {
         this.tipAddAddressLsit();
       }
-    } else if(this.withdrawAddressAddType === "import") {
+    } else if(this.pageType === "import") {
       if(this.pageStatus === "first" && this.imperInputValue) {
         this.importAddressKey()
       } else if(this.pageStatus === "second" && this.canSubmit) {
@@ -162,21 +162,51 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     let _addressList: AddressModel[] = [].concat(
       withdrawType === "create" ? this.addressList : this.imperAddress
     );
+    let _saveArr: AddressModel[] = [];
     if(withdrawType === "create") {
-      for(let index of this.addressErrorIndex) {
-        _addressList.splice(index, 1);
-      }
+      const _indexSet = new Set();
+      this.addressErrorList.forEach((item, index) => {
+        for(let k in item) {
+          _indexSet.add(index);
+          break;
+        }
+      });
+      _addressList.forEach( (address,index) => {
+        if(!_indexSet.has(index)) {
+          _saveArr.push(address);
+        }
+      })
+    } else {
+      _saveArr = _addressList;
     }
-    return this.addressService.saveBatchAddressList(_addressList).then(data => {
+
+
+    return this.addressService.saveBatchAddressList(_saveArr).then(data => {
       if(data.length) this.finishPage()
     })
+  }
+
+  checkRepeatAddress(addressInfo: AddressModel, index: number) {
+    let _has_repeat;
+    _has_repeat = this.addressList.find( (address, i) => {
+      if(address.addressName == addressInfo.addressName && index != i) {
+        return true;
+      }
+      return false;
+    });
+    debugger
+    if(_has_repeat) {
+      this.addressErrorList[index]["name"] = _has_repeat ? "地址名称重复，请修改" : '';
+    } else {
+      delete this.addressErrorList[index]["name"] 
+    }
   }
 
   /**
    * 批量生成,只有校验失败的数量跟生成数量相等.才无法提交
    */
   get canSubmit() {
-    if(this.withdrawAddressAddType === "create") {
+    if(this.pageType === "create") {
       let _errorNumer = 0;
       this.addressErrorList.forEach(error => {
         for(let k in error) {
@@ -185,10 +215,10 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
         }
       });
       this.validAddressNumber = +this.createAddressNumber - _errorNumer;
-      if(_errorNumer == this.createAddressNumber) return false;
+      if(_errorNumer >= this.createAddressNumber) return false;
       
       return true;
-    } else if(this.withdrawAddressAddType === "import") {
+    } else if(this.pageType === "import") {
       for (var k in this.importErrors) {
         return false;
       }
@@ -198,7 +228,7 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
   }
 
   changeInputEvent(type: string, addressInfo: AddressModel, index: number) {
-    const withdrawType = this.withdrawAddressAddType;
+    const withdrawType = this.pageType;
     if(type === "name") {
       addressInfo.addressName = addressInfo.addressName.trim();
     } else {
@@ -219,8 +249,7 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     return checkPromise.then(status => {
       if(withdrawType === "create") {
         delete this.addressErrorList[index][type]
-        const _index = this.addressErrorIndex.indexOf(+index);
-        _index >= 0 && this.addressErrorIndex.splice(_index, 1);
+        this.checkRepeatAddress(addressInfo, index);
       } else if(withdrawType === "import") {
         delete this.importErrors[type];
       }
@@ -228,7 +257,6 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     }).catch(error => {
       if(withdrawType === "create") {
         this.addressErrorList[index][type] =  error.MESSAGE || error;
-        this.addressErrorIndex.push(+index);
       } else if(withdrawType === "import") {
         this.importErrors[type] = error.MESSAGE || error;
       }

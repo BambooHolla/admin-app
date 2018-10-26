@@ -65,12 +65,45 @@ export class AppSettingProvider extends CommonService {
           obj = JSON.stringify(obj);
         } else {
           throw new TypeError(
-            "user token must be an object:{address,password,balance,fee}",
+            "user token must be an object",
           );
         }
         localStorage.setItem(this.USER_TOKEN_STORE_KEY, obj);
         this._setUserToken(this.getUserToken());
         return true;
+    }
+
+    refreshTokenExpiredTime() {
+      clearTimeout(this._token_timeout_ti);
+      try {
+        var tokenJson = localStorage.getItem(this.USER_TOKEN_STORE_KEY);
+        if (!tokenJson) {
+          return null;
+        }
+        var obj = JSON.parse(tokenJson);
+        if (obj.expiredTime && obj.expiredTime < Date.now()) {
+          return null;
+        }
+        obj.expiredTime = (Date.now() + 10*60*1000);
+        this._token_timeout_ti = setTimeout(() => {
+          console.log("User Token 过期：", obj);
+          this.emit("token@expire", this.user.userToken);
+          this.clearUserToken();
+        }, obj.expiredTime - Date.now());
+        
+        if (typeof obj !== "string") {
+          obj = JSON.stringify(obj);
+        } else {
+          throw new TypeError(
+            "user token must be an object",
+          );
+        }
+        localStorage.setItem(this.USER_TOKEN_STORE_KEY, obj);
+        
+  
+      } catch(e) {
+        return null;
+      }
     }
 
     private _setUserToken(token: string) {

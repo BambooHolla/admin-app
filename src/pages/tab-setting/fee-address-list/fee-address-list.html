@@ -31,7 +31,7 @@
                     <p>{{address?.rechargeWithdrawAddress}}</p>
                 </div>
             </div>
-            <picasso-icon name="picasso-disable" class="{{true?'disable':''}}"></picasso-icon>
+            <picasso-icon name="picasso-disable" class="{{address?.addressClass == '0'?'':'disable'}}"  (click)="askAddressEnabled(address)"></picasso-icon>
         </ion-item>
     </ion-list>
 </ion-content>

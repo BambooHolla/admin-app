@@ -3,7 +3,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SecondLevelPage } from '../../../app-framework/SecondLevelPage';
 import { FeeAddressAddPage } from '../fee-address-add/fee-address-add';
 import { asyncCtrlGenerator } from '../../../app-framework/Decorator';
-import { AddressUse, AddressServiceProvider } from '../../../providers/address-service/address-service';
+import { AddressUse, AddressServiceProvider, AddressModel } from '../../../providers/address-service/address-service';
+import { ProductModel } from '../../../providers/product-service/product-service';
 /**
  * Generated class for the FeeAddressListPage page.
  *
@@ -17,7 +18,7 @@ import { AddressUse, AddressServiceProvider } from '../../../providers/address-s
   templateUrl: 'fee-address-list.html',
 })
 export class FeeAddressListPage extends SecondLevelPage {
-  private productIBT;
+  private productBTC: ProductModel;
   public feeAddressList: any[];
   constructor(
     public navCtrl: NavController, 
@@ -26,13 +27,20 @@ export class FeeAddressListPage extends SecondLevelPage {
   ) {
     super(navCtrl, navParams);
     this.init();
+    this.event.on("job-finished", async ({ id, data }) => {
+      console.log("job-finished", id, data);
+      if(id === "page-fee-address-add" && data) {
+        const { productHouseId } = data;
+          this.getAddressList();
+      }
+    });
   }
 
   
   async init() {
     const _productList = await this.productService.productList.getPromise();
-    this.productIBT = _productList.find(product => product.productName.toLocaleLowerCase() === "ibt");
-    if(this.productIBT) {
+    this.productBTC = _productList.find(product => product.productName.toLocaleLowerCase() === "btc");
+    if(this.productBTC) {
       this.getAddressList();
     }
     
@@ -42,8 +50,44 @@ export class FeeAddressListPage extends SecondLevelPage {
   @asyncCtrlGenerator.loading()
   @asyncCtrlGenerator.error("获取地址列表失败")
   getAddressList() {
-    return this.addressService.getAddressList(this.productIBT.productHouseId,AddressUse.Miner).then(addressList => {
+    return this.addressService.getAddressList(this.productBTC.productHouseId,AddressUse.Miner).then(addressList => {
       this.feeAddressList = addressList;
+    })
+  }
+
+  askAddressEnabled(address: AddressModel) {
+    const _message = address.addressClass == "0" ? "是否禁用该地址" : "是否启用该地址";
+    const _tipType = _message === "是否禁用该地址" ? "showErrorDialog" : "showSuccessDialog";
+    this[_tipType] (
+      _message,
+      undefined,
+      undefined,
+      [
+        {
+          text: "取消",
+          handler: () => {}
+        },
+        {
+          text: "确认",
+          handler: () => {
+            this.handlerAddressEnabled(address);
+          }
+        },
+      ]
+    );
+  }
+
+  @asyncCtrlGenerator.loading()
+  @asyncCtrlGenerator.success("改变地址状态成功")
+  @asyncCtrlGenerator.error("改变地址状态失败")
+  handlerAddressEnabled(address: AddressModel) {
+    let {id , addressClass} = address;
+    addressClass = addressClass == "0" ? "1" : "0";
+    return this.addressService.editAddressById(id, addressClass).then( status => {
+      if(status === "ok") {
+        address.addressClass = addressClass;
+      }
+      return status;
     })
   }
   
@@ -52,9 +96,9 @@ export class FeeAddressListPage extends SecondLevelPage {
     this.actionSheetCtrl.create({
       cssClass: "add-address",
       buttons: [{
-        text: 'BTC',
+        text: this.productBTC.productName,
         handler: () => {
-          this.routeTo('page-fee-address-add',{auto_return:true,product:"USDT",type});
+          this.routeTo('page-fee-address-add',{auto_return:true,product: this.productBTC,type});
         }
       }, {
         text: '取消',
@@ -65,4 +109,6 @@ export class FeeAddressListPage extends SecondLevelPage {
       }]
     }).present();
   }
+
+
 }

@@ -102,7 +102,7 @@ export class TabSettingPage extends FirstLevelPage {
         await this.file.createFile(this.FILE_PATH, this.FILE_NAME, true);
       }
       // 写文件，会覆盖原来文件内容
-      this.file.writeExistingFile(this.FILE_PATH, this.FILE_NAME, key);
+      this.file.writeExistingFile(this.FILE_PATH, this.FILE_NAME, JSON.stringify(key));
     } catch(err) {
       return Promise.reject(err.message || err)
     }

@@ -5,6 +5,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { asyncCtrlGenerator } from '../../app-framework/Decorator';
 import { AppPageServiceProvider } from '../../providers/app-page-service/app-page-service';
 import { ProductModel } from '../../providers/product-service/product-service';
+import { AddressServiceProvider, AddressUse, AddressModel } from '../../providers/address-service/address-service';
 
 
 /**
@@ -19,101 +20,65 @@ import { ProductModel } from '../../providers/product-service/product-service';
 })
 export class TabAssetPage extends FirstLevelPage {
   private selectTypeIndex: number = 0;
-  private headerProduct: string = "IBT";
-  private selectAddress: any[] = [
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
+  private selectAddressList: AddressModel[] = [];
 
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-    {title:"充值划转地址", total:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy"},
-
-  ];
-  private allAddress: any = {
-    "IBT": [
-      {id:1,name:"ibt"},
-      {id:2,name:"ibt"},
-      {id:3,name:"ibt"},
-      {id:4,name:"ibt"},
-      {id:5,name:"ibt"},
-      {id:6,name:"ibt"},
-      {id:7,name:"ibt"},
-      {id:8,name:"ibt"},
-      {id:9,name:"ibt"},
-      {id:10,name:"ibt"},
-      {id:11,name:"ibt"},
-    ],
-    "USDT": [
-      {id:1,name:"USDT"},
-      {id:2,name:"USDT"},
-      {id:3,name:"USDT"},
-    ],
-    "ETH": [
-      {id:11,name:"ETH"},
-      {id:12,name:"ETH"},
-      {id:13,name:"ETH"},
-      {id:14,name:"ETH"},
-      {id:15,name:"ETH"},
-      {id:16,name:"ETH"},
-    ],
-    "BTC": [
-      {id:1,name:"BTC"},
-      {id:2,name:"BTC"},
-      {id:3,name:"BTC"},
-      {id:4,name:"BTC"},
-      {id:5,name:"BTC"},
-      {id:6,name:"BTC"},
-      {id:7,name:"BTC"},
-    ]
-  }
   private typeArr = [
-    {name:"充值资产",value:13245678912.123456546,action:true},
-    {name:"提现资产",value:1232134456.546,action:false},
-    {name:"矿工费资产",value:2777774645456.546,action:false},
+    {name:"充值资产"},
+    {name:"提现资产"},
+    {name:"矿工费资产"},
   ]
-  selectType = this.typeArr[0];
-  checkType(item,i) {
+
+
+  changeType(item,i) {
+    if(this.selectTypeIndex == i) return ;
     this.selectTypeIndex = i;
-    this.selectType = item;
+    return this.getAddressList();
+
   }
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public statusBar: StatusBar, 
     public appPageService: AppPageServiceProvider,
+    public addressService: AddressServiceProvider,
   ) {
       super(navCtrl, navParams);
       
-    this.appSetting = undefined;
+    (async() => {
+      this.productList = await this.productService.productList.getPromise();
+      if(this.productList.length) this.selectProduct = this.productList[0];
+      this.init();
+    })();
+    
+    
   }
  
 
   productList: ProductModel[] = [];
+  selectProduct: ProductModel;
 
   @TabAssetPage.willEnter
-  @asyncCtrlGenerator.loading()
-  @asyncCtrlGenerator.error("获取币种列表失败")
   async pageWillEnter() {
     this.statusBar.styleLightContent();
     this.menuCtrl.enable(true, "myMenu");
-    
     this.appPageService.on("menu@page", async path => {
       this.routeTo(path);
     }) 
-    this.productList = await this.productService.productList.getPromise();
+    
   }
+
   
+  init() {
+    this.getAddressList();
+  }
+  get addressType() {
+    switch(this.selectTypeIndex) {
+      case 0: return AddressUse.Recharge; 
+      case 1: return AddressUse.Withdraw;
+      case 2: return AddressUse.Miner;
+    }
+  }
+
   @TabAssetPage.onDestory
   @TabAssetPage.willLeave
   async pageWillLeave() {
@@ -123,6 +88,16 @@ export class TabAssetPage extends FirstLevelPage {
     this.appPageService.off("menu@page");
   }
   
+  @asyncCtrlGenerator.loading()
+  @asyncCtrlGenerator.error("获取币种列表失败")
+  getAddressList() {
+    return this.addressService.getAddressList(
+      this.selectProduct.productHouseId,
+      this.addressType,
+    ).then(addressList => {
+      this.selectAddressList = addressList;
+    })
+  }
   
   async handlerSelectProduct() {
     const _opts = {
@@ -132,10 +107,13 @@ export class TabAssetPage extends FirstLevelPage {
     this.productList.forEach(product => {
       _opts.buttons.push({
         text: product.productName,
-        role: this.headerProduct === product.productName ? "destructive" : "",
+        role: this.selectProduct.productName === product.productName ? "destructive" : "",
         handler: () => {
-          this.headerProduct = product.productName;
-          this.getAddress(this.headerProduct);
+          if(this.selectProduct.productName === product.productName) return;
+          this.selectProduct = product;
+          this.selectTypeIndex = 0;
+          this.selectAddressList = [];
+          this.getAddressList();
         }
       })
     });
@@ -146,27 +124,11 @@ export class TabAssetPage extends FirstLevelPage {
           console.log('Cancel clicked');
         }
     });
-    debugger
     this.actionSheetCtrl.create(_opts).present();
 
   }
 
-  getAddress(product: string) {
-    // this.selectAddress = this.allAddress[product];
-    if(product == "IBT") {
-      this.typeArr = [
-        {name:"充值资产",value:13245678912.123456546,action:true},
-        {name:"提现资产",value:1232134456.546,action:false},
-        {name:"矿工费资产",value:2777774645456.546,action:false},
-      ] 
-    } else {
-      this.typeArr = [
-        {name:"充值资产",value:22212.555,action:true},
-        {name:"提现资产",value:456.6,action:false},
-      ] 
-    }
-    this.selectTypeIndex = 0;
-  }
+  
 
   @asyncCtrlGenerator.success("地址已经成功复制到剪切板")
   @asyncCtrlGenerator.error("地址复制失败")

@@ -12,7 +12,7 @@
           <picasso-icon name="picasso-account" class="title-account"></picasso-icon>
       </button>
     <ion-title>
-      <span class="title" (click)="handlerSelectProduct()">{{headerProduct}}<picasso-icon name="picasso-inverted-triangle"></picasso-icon></span>
+      <span class="title" (click)="handlerSelectProduct()">{{selectProduct?.productName}}<picasso-icon name="picasso-inverted-triangle"></picasso-icon></span>
       <!-- <div style="width: 24px;height: 24px;margin-left: 24px;background: red; position: absolute; top: 50%;left: 0;" (click)="routeTo('page-account')"></div> -->
     </ion-title>
   </ion-navbar>
@@ -20,14 +20,14 @@
   <!-- 总资产 -->
   <div class="assets">
       <div class="assets-message"><span>总资产</span><picasso-icon name="picasso-eye-{{appDataProvider?.hiddenData? 'close' : 'open'}}" (click)="handlerHiddenData()"></picasso-icon> </div>
-      <div class="assets-total">{{appDataProvider?.hiddenData? hidden_data_logo : 123456789.123456789}}</div>
-      <div class="assets-rate" [hidden]="appDataProvider?.hiddenData">≈ 132132132131213 <span class="unit">CNY</span></div>
+      <div class="assets-total">{{appDataProvider?.hiddenData? hidden_data_logo : "--接口未对接--"}}</div>
+      <div class="assets-rate" [hidden]="appDataProvider?.hiddenData">≈ --接口未对接-- <span class="unit">CNY</span></div>
   </div>
   
   <ion-grid class="operate">
     <!-- 资产类型 -->
     <ion-row class="type">
-      <ion-col (click)="checkType(item,i)" *ngFor="let item of typeArr,let i = index" [class.action]="selectTypeIndex == i">
+      <ion-col (click)="changeType(item,i)" *ngFor="let item of typeArr,let i = index" [class.action]="selectTypeIndex == i">
         <div class="name">
           {{item.name}}
         </div>
@@ -41,10 +41,10 @@
           <div class="money-total">
             <span class="total-name">
               <picasso-icon name="picasso-asset"></picasso-icon> 
-              {{selectType?.name}}
+              {{typeArr[selectTypeIndex]?.name}}
             </span> 
-            <span class="total-value">{{selectType?.value}}</span> 
-            <span class="unit">IBT</span>
+            <span class="total-value">--缺少接口--</span> 
+            <span class="unit">{{selectProduct?.productName}}</span>
             <picasso-icon name="picasso-down-order"></picasso-icon>
           </div>
       </ion-col>
@@ -55,21 +55,23 @@
 
 
 <ion-content>
-  
+    <div *ngIf="!selectAddressList || selectAddressList.length == 0" class="tip">
+        暂无数据  
+    </div>
   <ion-list class="address-group">
-    <ion-item  *ngFor="let address of selectAddress" class="address-item">
-      <div class="item-header"  (click)="routeTo('page-address-asset-list',{product:address,productName:headerProduct})">
+    <ion-item  *ngFor="let address of selectAddressList" class="address-item">
+      <div class="item-header"  (click)="routeTo('page-address-asset-list',{product:address,productName:'headerProduct'})">
         <div class="item-header-title">
-          {{address?.title}}
+          {{address?.addressName}}
         </div>
         <div class="item-header-total">
-          {{address?.total}}
-          <span class="unit">IBT</span>
+          {{address?.addressBalance}}
+          <span class="unit">{{selectProduct?.productName}}</span>
         </div>
       </div>
       <div class="address-item-body">
-        <div class="overflow-ellipsis item-body-address"  (click)="routeTo('page-address-asset-list',{product:address,productName:headerProduct})">
-          {{address?.address}}
+        <div class="overflow-ellipsis item-body-address"  (click)="routeTo('page-address-asset-list',{product:address,productName:'headerProduct'})">
+          {{address?.rechargeWithdrawAddress}}
         </div>
         <picasso-icon name="picasso-copy" (click)="copyAddress(address?.address)"></picasso-icon>
       </div>

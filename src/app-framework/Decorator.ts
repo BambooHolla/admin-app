@@ -60,6 +60,7 @@ export function asyncErrorWrapGenerator(
                     return keep_throw? Promise.reject(err) : err;
                 }
                 let err_msg;
+                let code: number;
                 if(err instanceof Error) {
                     err_msg = err.message;
                 } else if(err.message) {
@@ -69,6 +70,7 @@ export function asyncErrorWrapGenerator(
                 } else {
                     err_msg = err + '';
                 }
+                if(err.code == -1) code = +err.code;
                 console.group("CATCH BY asyncErrorWrapGenerator:");
                 console.warn(err);
                 console.groupEnd();
@@ -126,9 +128,10 @@ export function asyncErrorWrapGenerator(
                     ); 
                     const present_able = _dialogGenerator(dialog_opts, this);
                     Promise.resolve<Modal | Alert>(present_able).then( p => {
-                        if (opts && opts.independent) {
+                        if(code != -1) {
+                          if (opts && opts.independent) {
                             p.present();
-                        } else {
+                          } else {
                             const p_key = JSON.stringify(opts);
                             if (!ERROR_LAYER_MAP.has(p_key)) {
                                 ERROR_LAYER_MAP.set(p_key, p);
@@ -142,6 +145,7 @@ export function asyncErrorWrapGenerator(
                                 // 如果已经有了，那么就不用在弹出了
                                 console.warn("弹出层已经存在，不重复弹出", dialog_opts);
                             }
+                          }
                         }
                     });
                   },

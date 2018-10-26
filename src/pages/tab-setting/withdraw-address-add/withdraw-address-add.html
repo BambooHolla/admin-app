@@ -8,10 +8,10 @@
 
   <ion-navbar>
     <ion-title>
-      {{withdrawAddressAddType === "create" ? pageStatus === "first" ? "生成数量" : "新增提现地址" : "新增提现地址"}}
+      {{pageType === "create" ? pageStatus === "first" ? "生成数量" : "新增提现地址" : "新增提现地址"}}
     </ion-title>
     <div class="handler-address-btn" (click)="handlerNextOrAdd()" *ngIf="pageStatus === 'first'"
-      [class.disabled]="withdrawAddressAddType === 'create'? !(createAddressNumber > 0) : !imperInputValue">
+      [class.disabled]="pageType === 'create'? !(createAddressNumber > 0) : !imperInputValue">
         下一步
     </div>
     <div class="handler-address-btn" (click)="handlerNextOrAdd()" *ngIf="pageStatus === 'second'"
@@ -26,7 +26,7 @@
 
 <ion-content padding [class.change-background-img]="isChangeBackground">
   
-  <ng-container *ngIf="withdrawAddressAddType == 'create'">
+  <ng-container *ngIf="pageType == 'create'">
       <div class="page-wrapper">
         <div class="first-step" [ngClass]='pageStatus'>
           <div class="page-tip">
@@ -73,7 +73,7 @@
       </div>
   </ng-container>
 
-  <ng-container *ngIf="withdrawAddressAddType == 'import'">
+  <ng-container *ngIf="pageType == 'import'">
       <div class="page-wrapper">
           <div class="first-step" [ngClass]='pageStatus'>
             <div class="page-tip">
