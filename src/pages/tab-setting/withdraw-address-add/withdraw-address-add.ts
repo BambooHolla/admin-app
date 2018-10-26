@@ -186,15 +186,46 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     })
   }
 
+  /**
+   * 由于地址名称校验通过请求，只能判断数据库是否已经存在
+   * 这种只适合一个的情况下
+   * 批量地址在确定数据库不存在的情况下，还需要本地校验各个输入框的名称是否重复
+   * @param addressInfo 当前输入框对应的addressObj
+   * @param index 当前输入框索引
+   */
   checkRepeatAddress(addressInfo: AddressModel, index: number) {
-    let _has_repeat;
-    _has_repeat = this.addressList.find( (address, i) => {
-      if(address.addressName == addressInfo.addressName && index != i) {
-        return true;
-      }
-      return false;
-    });
+    let _has_repeat: boolean = false;
+    // 遍历地址列表
+    // 如果有一致的，需要添加错误信息
+    // 最后如果有发现重复，也需要对自身添加错误信息
     debugger
+    this.addressList.forEach( (address, i) => {
+      if(!this.addressErrorList[i]["name"] || this.addressErrorList[i]["name"] === "地址名称重复，请修改") {
+        // 前提：已经过请求校验，addressName不存在，或者存在 “重复”的错误信息
+        if(
+          (!this.addressErrorList[i]["name"] || this.addressErrorList[i]["name"] === "地址名称重复，请修改")
+          && address.addressName == addressInfo.addressName && index != i
+        ) {
+          // 满足addressName重复或者存在 “重复”的错误信息, 不是自身
+          this.addressErrorList[i]["name"] =  "地址名称重复，请修改";
+          if(!_has_repeat) _has_repeat = true;
+        } else if(index != i) {
+          // 不重复，需要再次遍历
+          // 删除的情况需要在判断该需要删除的，排除当前的输入框，剩下的是否还存在重复
+          let _again_find_repeat: number = undefined;
+          const _again_find = this.addressList.find((again_address,again_i) => {
+            if(this.addressErrorList[i]["name"] === this.addressErrorList[again_i]["name"]) {
+              return true;
+            }
+            return false;
+          });
+          if(!_again_find) delete this.addressErrorList[i]["name"];
+        }
+      }
+      
+    });
+    
+    // 是否发现跟自身重复，有的话当前输入框也要标识
     if(_has_repeat) {
       this.addressErrorList[index]["name"] = _has_repeat ? "地址名称重复，请修改" : '';
     } else {
