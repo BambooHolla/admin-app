@@ -202,19 +202,20 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     this.addressList.forEach( (address, i) => {
       if(!this.addressErrorList[i]["name"] || this.addressErrorList[i]["name"] === "地址名称重复，请修改") {
         // 前提：已经过请求校验，addressName不存在，或者存在 “重复”的错误信息
-        if(
-          (!this.addressErrorList[i]["name"] || this.addressErrorList[i]["name"] === "地址名称重复，请修改")
-          && address.addressName == addressInfo.addressName && index != i
-        ) {
+        if(address.addressName == addressInfo.addressName && index != i) {
           // 满足addressName重复或者存在 “重复”的错误信息, 不是自身
           this.addressErrorList[i]["name"] =  "地址名称重复，请修改";
           if(!_has_repeat) _has_repeat = true;
         } else if(index != i) {
           // 不重复，需要再次遍历
           // 删除的情况需要在判断该需要删除的，排除当前的输入框，剩下的是否还存在重复
-          let _again_find_repeat: number = undefined;
+          let _again_find_repeat: any;
           const _again_find = this.addressList.find((again_address,again_i) => {
-            if(this.addressErrorList[i]["name"] === this.addressErrorList[again_i]["name"]) {
+            if(
+                this.addressErrorList[i]["name"] === this.addressErrorList[again_i]["name"]
+                && i != again_i && index != again_i
+            ) {
+                // 重新遍历发现还是存在重复（自己，跟当前除外）
               return true;
             }
             return false;

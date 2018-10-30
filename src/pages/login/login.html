@@ -14,62 +14,62 @@
 
 
 <ion-content>
-  <div class="account-icon">
-    <picasso-icon name="picasso-bj-account"></picasso-icon>
-  </div>
-  <div class="account-input-group account-form">
-    <div class="account-input account-number">
-        <div class="account-label">用户名</div>
-        <ion-item no-padding>
-          <!-- <ion-label stacked>Username</ion-label> -->
-          <ion-input type="text" [(ngModel)]="formData.login_account"  set-input-status="login_account"></ion-input>
-        </ion-item>
+    <div class="account-icon">
+        <picasso-icon name="picasso-bj-account"></picasso-icon>
     </div>
-    <div class="account-input account-pwd">
-        <div class="account-label">密码</div>
-        <ion-item no-padding>
-          <!-- <ion-label stacked>Username</ion-label> -->
-          <ion-input type="password" #pwdInput 
-            [(ngModel)]="formData.login_password" 
-            set-input-status="login_password" 
-          ></ion-input>
-          
-          <ion-thumbnail item-end style="z-index:9999;" (click)="handlerShowPWD(pwdInput)">
-              <div tappable  class="view-code" >
-                  <picasso-icon name='picasso-eye-{{showPWD ? "open" : "close"}}' item-end></picasso-icon>
-              </div>
-          </ion-thumbnail>
-        </ion-item>
+    <div class="account-input-group account-form" scroll-fix-keyboard>
+        <div class="account-input account-number">
+            <div class="account-label">用户名</div>
+            <ion-item no-padding>
+            <!-- <ion-label stacked>Username</ion-label> -->
+            <ion-input type="text" [(ngModel)]="formData.login_account"  set-input-status="login_account"></ion-input>
+            </ion-item>
+        </div>
+        <div class="account-input account-pwd">
+            <div class="account-label">密码</div>
+            <ion-item no-padding>
+            <!-- <ion-label stacked>Username</ion-label> -->
+            <ion-input type="password" #pwdInput 
+                [(ngModel)]="formData.login_password" 
+                set-input-status="login_password" 
+            ></ion-input>
+            
+            <ion-thumbnail item-end style="z-index:9999;" (click)="handlerShowPWD(pwdInput)">
+                <div tappable  class="view-code" >
+                    <picasso-icon name='picasso-eye-{{showPWD ? "open" : "close"}}' item-end></picasso-icon>
+                </div>
+            </ion-thumbnail>
+            </ion-item>
+        </div>
+        <div class="account-input account-phone">
+            <div class="account-label">手机号</div>
+            <ion-item no-padding>
+            <!-- <ion-label stacked>Username</ion-label> -->
+            <ion-input type="number" #phoneInput 
+            (input)="checkoutFormat(phoneInput.value)" 
+            [disabled]="sendingCode"  
+            [(ngModel)]="formData.login_phone"  
+            (ngModelChange)="handlerInputValueLength(phoneInput, 11)"
+            set-input-status="login_phone"></ion-input>
+            <ion-thumbnail item-end style="z-index:9999;" class="thumbnail-phone">
+                <button (click)="handlerSendCode()" [disabled]="isCheckoutPhone">
+                {{firstSendCode ? "获取验证码" : !sendingCode ? "重新发送" : "( " + sendTimeLock + "s )"}}
+                
+                </button>
+            </ion-thumbnail>
+            
+            </ion-item>
+        </div>
+        <div class="account-input account-code">
+            <div class="account-label">输入验证码</div>
+            <ion-item no-padding>
+            <!-- <ion-label stacked>Username</ion-label> -->
+            <ion-input type="text" #codeInput  [(ngModel)]="formData.login_code"  set-input-status="login_code" (ngModelChange)="handlerInputValueLength(codeInput, 11)"></ion-input>
+            </ion-item>
+        </div>
+        <div class="account-sub-btn">
+        <button [disabled]="!canSubmit" (click)="doSubmit()">登录</button>
+        </div>
     </div>
-    <div class="account-input account-phone">
-        <div class="account-label">手机号</div>
-        <ion-item no-padding>
-          <!-- <ion-label stacked>Username</ion-label> -->
-          <ion-input type="number" #phoneInput 
-          (input)="checkoutFormat(phoneInput.value)" 
-          [disabled]="sendingCode"  
-          [(ngModel)]="formData.login_phone"  
-          (ngModelChange)="handlerInputValueLength(phoneInput, 11)"
-          set-input-status="login_phone"></ion-input>
-          <ion-thumbnail item-end style="z-index:9999;" class="thumbnail-phone">
-            <button (click)="handlerSendCode()" [disabled]="isCheckoutPhone">
-              {{firstSendCode ? "获取验证码" : !sendingCode ? "重新发送" : "( " + sendTimeLock + "s )"}}
-              
-            </button>
-          </ion-thumbnail>
-         
-        </ion-item>
-    </div>
-    <div class="account-input account-code">
-        <div class="account-label">输入验证码</div>
-        <ion-item no-padding>
-          <!-- <ion-label stacked>Username</ion-label> -->
-          <ion-input type="text" #codeInput  [(ngModel)]="formData.login_code"  set-input-status="login_code" (ngModelChange)="handlerInputValueLength(codeInput, 11)"></ion-input>
-        </ion-item>
-    </div>
-    <div class="account-sub-btn">
-      <button [disabled]="!canSubmit" (click)="doSubmit()">登录</button>
-    </div>
-  </div>
   
 </ion-content>

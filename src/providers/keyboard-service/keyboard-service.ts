@@ -54,7 +54,7 @@ export class KeyboardServiceProvider {
   // 但是如果修改了 MainActivity.java ，设置了全屏模式，
   // 键盘弹出、收起时页面高度就不会变化，
   // 因此需要在软键盘弹出时对页面高度进行调整。
-  toggleContentHeight(keyboardShow: boolean, keyboardHeight: number, time: number) {
+  toggleContentHeight(keyboardShow: boolean, keyboardHeight: number) {
     const renderer2 = this._renderer2;
     if (!renderer2) {
         return;
@@ -70,9 +70,7 @@ export class KeyboardServiceProvider {
     const rootHeight = keyboardHeight
         ? this.fullHeight - keyboardHeight + "px"
         : "100%";
-    setTimeout(() => {
-      renderer2.setStyle(rootComponent, "height", rootHeight);
-    }, time);
+    renderer2.setStyle(rootComponent, "height", rootHeight);
   }
 
   initKeyboardEvent(): void {
@@ -81,13 +79,13 @@ export class KeyboardServiceProvider {
     // 但为了避免处理函数的重复绑定，因此统一写在这个服务里。
     this.keyboard.onKeyboardShow().subscribe(e => {
       const keyboardHeight = e.keyboardHeight || (e.detail && e.detail.keyboardHeight);
-      this.toggleContentHeight(true, keyboardHeight, 150);
+      this.toggleContentHeight(true, keyboardHeight);
       this.events.publish('hideTabs');
     });
 
     this.keyboard.onKeyboardHide().subscribe(e => {
       const keyboardHeight = e.keyboardHeight || (e.detail && e.detail.keyboardHeight);
-      this.toggleContentHeight(false, 0, 0);
+      this.toggleContentHeight(false, 0);
       this.events.publish('showTabs');
     });
   }

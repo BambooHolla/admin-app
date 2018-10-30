@@ -18,7 +18,7 @@ export function tryRegisterGlobal(name, obj) {
 
 /*通用的AppUrl*/
 export class AppUrl {
-	static SERVER_URL = "http://192.168.18.23:40001";
+	static SERVER_URL = "http://192.168.18.24:40001";
 	static SERVER_PREFIX = "/api/v1/bngj";
 	// static SERVER_PREFIX = "";
 	constructor(public path: string) {}
