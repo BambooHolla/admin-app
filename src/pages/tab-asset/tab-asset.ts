@@ -6,8 +6,7 @@ import { asyncCtrlGenerator } from '../../app-framework/Decorator';
 import { AppPageServiceProvider } from '../../providers/app-page-service/app-page-service';
 import { ProductModel } from '../../providers/product-service/product-service';
 import { AddressServiceProvider, AddressUse, AddressModel } from '../../providers/address-service/address-service';
-
-
+import { BigNumber } from 'bignumber.js';
 /**
  * Generated class for the TabAssetPage page.
  *
@@ -19,14 +18,20 @@ import { AddressServiceProvider, AddressUse, AddressModel } from '../../provider
   templateUrl: 'tab-asset.html',
 })
 export class TabAssetPage extends FirstLevelPage {
-  private selectTypeIndex: number = 0;
-  private selectAddressList: AddressModel[] = [];
+	private selectTypeIndex: number = 0;
+	// 用于显示
+	private selectAddressList: AddressModel[] = [];
+	// 保存可用、禁用地址的默认排序
+	private disableArr: AddressModel[] = [];
+	private usableArr: AddressModel[] = []
 
-  private typeArr = [
-    {name:"充值资产"},
-    {name:"提现资产"},
-    {name:"矿工费资产"},
-  ]
+	private typeArr = [
+		{name:"充值资产"},
+		{name:"提现资产"},
+		{name:"矿工费资产"},
+	]
+	// 地址排序,undefined: 默认，true:升序，false:降序
+	private sortAddressType: boolean = undefined;
 
 
   changeType(item,i) {
@@ -95,9 +100,46 @@ export class TabAssetPage extends FirstLevelPage {
       this.selectProduct.productHouseId,
       this.addressType,
     ).then(addressList => {
-      this.selectAddressList = addressList;
+		let _concatArr = [];
+		// 需求：禁用的全部在最底下,加上排序
+		// 做法：先筛选出可用，跟禁用2个数组，分别排序，在合并
+		this.usableArr = addressList
+		.filter(address => address.addressClass == String(0));
+		this.disableArr = addressList
+		.filter(address => address.addressClass == String(1));
+		_concatArr = [].concat(this.sortAddressList(this.usableArr),this.sortAddressList(this.disableArr));
+		this.selectAddressList = _concatArr;
     })
   }
+
+    changeSortType() {
+        this.sortAddressType = 
+		this.sortAddressType == undefined ? true 
+		: this.sortAddressType ? false : undefined;	
+        let _concatArr = [];
+		_concatArr = [].concat(this.sortAddressList(this.usableArr),this.sortAddressList(this.disableArr));
+		this.selectAddressList = _concatArr;
+    }
+	sortAddressList(addressList: AddressModel[]) {
+		let _arr: AddressModel[] = [].concat(addressList);
+
+		switch(this.sortAddressType) {
+			case undefined:
+				// 默认排序，不做改变		
+				break;
+			case true:
+			case false:
+				_arr.sort((nextAddress,address) => {
+					// BigNumber.comparedTo(n)
+					// BigNumber大于n 返回1，小于n 返回-1，相等返回0
+					return this.sortAddressType ? 
+					(new BigNumber(nextAddress.addressBalance||"0")).comparedTo(address.addressBalance||"0") :
+					(new BigNumber(address.addressBalance||"0")).comparedTo(nextAddress.addressBalance||"0");
+				})
+				break;
+		}
+		return _arr;	
+	}
   
   async handlerSelectProduct() {
     const _opts = {

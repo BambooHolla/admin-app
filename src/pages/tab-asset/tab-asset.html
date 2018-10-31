@@ -45,7 +45,10 @@
             </span> 
             <span class="total-value">--缺少接口--</span> 
             <span class="unit">{{selectProduct?.productName}}</span>
-            <picasso-icon name="picasso-down-order"></picasso-icon>
+            <picasso-icon 
+                name="picasso-sort-{{sortAddressType == undefined?'default':sortAddressType?'up':'down'}}"
+                (click)=changeSortType()
+            ></picasso-icon>
           </div>
       </ion-col>
     </ion-row>
@@ -59,7 +62,7 @@
         暂无数据  
     </div>
   <ion-list class="address-group">
-    <ion-item  *ngFor="let address of selectAddressList" class="address-item">
+    <ion-item  *ngFor="let address of selectAddressList" class="address-item" [class.disable]="address?.addressClass != '0'">
       <div class="item-header"  (click)="routeTo('page-address-asset-list',{product:address,productName:'headerProduct'})">
         <div class="item-header-title">
           {{address?.addressName}}

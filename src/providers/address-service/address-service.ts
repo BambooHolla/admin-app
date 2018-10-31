@@ -41,7 +41,7 @@ export class AddressServiceProvider {
     return this.fetch.get<keyModel>(this.INIT_KEY).then(data => data['data'] || data)
   }
 
-  getAddressList(productHouseId: string, addressUse: string, page: number = 1, pageSize: number = 1000) {
+  getAddressList(productHouseId: string, addressUse: string, page: number = 1, pageSize: number = 1000): Promise<AddressModel[]> {
     return this.fetch.get<AddressModel[]>(
       this.GET_ADDRESS_LIST,
       {

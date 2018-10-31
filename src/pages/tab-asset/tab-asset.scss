@@ -10,6 +10,15 @@ page-tab-asset {
         font-weight: 500;
         text-shadow: 4px 4px 2px #e0e0e0;
     }
+    .disable {
+        color: #fb8a8a !important;
+        filter: grayscale(100%);
+        background-color: #f4f4f4;
+        .item-header,
+        .item-header-total {
+            color: #fb8a8a !important;
+        }
+    }
     // 顶部下拉选择
     > ion-header {
         background-color: #f2f2f2;

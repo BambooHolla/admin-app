@@ -1,5 +1,6 @@
 import { Component, ViewChild, Renderer2 } from '@angular/core';
 import { Platform, ActionSheetController, LoadingController, AlertController, ToastController, ModalController, Nav, MenuController, Events, LoadingOptions } from 'ionic-angular';
+import { Storage } from "@ionic/storage";
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { JPush } from '@jiguang-ionic/jpush';
@@ -70,6 +71,7 @@ export class MyApp extends EventEmitter {
     public productService: ProductServiceProvider,
     public InformService: InformServiceProvider,
     public renderer2: Renderer2,
+    public storage: Storage,
   ) {
     super();
     window["myapp"] = this;
@@ -98,7 +100,7 @@ export class MyApp extends EventEmitter {
     this.appInit();
     // 初始化页面
     const initPage = (async () => {
-      if(this.appSetting.getUserToken()){
+      if(this.appSetting.getUserToken() && await this.storage.get('adminAppGestureLockObj')){
         return GestureLockPage;
       }
       return LoginPage;

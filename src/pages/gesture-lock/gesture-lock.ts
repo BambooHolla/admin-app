@@ -1,6 +1,6 @@
-import {Component, ElementRef, ViewChild, Renderer2} from '@angular/core';
-import {IonicPage, NavController, NavParams, ViewController, Events, Platform, AlertController} from 'ionic-angular';
-import {Storage} from "@ionic/storage";
+import { Component, ElementRef, ViewChild, Renderer2} from '@angular/core';
+import { IonicPage, NavController, NavParams, ViewController, Events, Platform, AlertController} from 'ionic-angular';
+import { Storage } from "@ionic/storage";
 import { FirstLevelPage } from '../../app-framework/FirstLevelPage';
 import { TabsPage, LoginPage } from '../pages';
 
@@ -106,10 +106,13 @@ export class GestureLockPage extends FirstLevelPage {
     this.bindEvent();
 
     await this.storage.get('adminAppGestureLockObj').then(data => {
-      if (data) {
+      if(data) {
         this.adminAppGestureLockObj = data;
         this.titleTip = "手势密码"
         this.titleMes = "手势密码解锁";
+      } else {
+        this.titleTip = "设置手势密码"
+        this.titleMes = "请绘制手势密码";
       }
     });
 
