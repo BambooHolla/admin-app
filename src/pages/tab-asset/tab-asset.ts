@@ -3,7 +3,7 @@ import { NavController, NavParams } from 'ionic-angular';
 import { FirstLevelPage } from '../../app-framework/FirstLevelPage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { asyncCtrlGenerator } from '../../app-framework/Decorator';
-import { AppPageServiceProvider } from '../../providers/app-page-service/app-page-service';
+
 import { ProductModel } from '../../providers/product-service/product-service';
 import { AddressServiceProvider, AddressUse, AddressModel } from '../../providers/address-service/address-service';
 import { BigNumber } from 'bignumber.js';
@@ -26,9 +26,18 @@ export class TabAssetPage extends FirstLevelPage {
 	private usableArr: AddressModel[] = []
 
 	private typeArr = [
-		{name:"充值资产"},
-		{name:"提现资产"},
-		{name:"矿工费资产"},
+		{
+            name: "充值资产",
+            type: AddressUse.Recharge,
+        },
+		{
+            name: "提现资产",
+            type: AddressUse.Withdraw,
+        },
+		{
+            name: "矿工费资产",
+            type: AddressUse.Miner,
+        },
 	]
 	// 地址排序,undefined: 默认，true:升序，false:降序
 	private sortAddressType: boolean = undefined;
@@ -44,7 +53,6 @@ export class TabAssetPage extends FirstLevelPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public statusBar: StatusBar, 
-    public appPageService: AppPageServiceProvider,
     public addressService: AddressServiceProvider,
   ) {
       super(navCtrl, navParams);
@@ -55,7 +63,12 @@ export class TabAssetPage extends FirstLevelPage {
       this.init();
     })();
     
-    
+    this.appPageService.on("tab-asset@refresh", ({id,type,productHouseId}) => {
+        console.log("tab-asset页面，被:",id,type,this.typeArr[this.selectTypeIndex],productHouseId)
+        if(this.selectProduct.productHouseId == productHouseId && this.typeArr[this.selectTypeIndex].type == type) {
+            this.getAddressList();
+        }
+    })
   }
  
 
@@ -82,6 +95,11 @@ export class TabAssetPage extends FirstLevelPage {
       case 1: return AddressUse.Withdraw;
       case 2: return AddressUse.Miner;
     }
+  }
+
+  @TabAssetPage.onDestory
+  pageDestory() {
+    this.appPageService.off("tab-asset@refresh");
   }
 
   @TabAssetPage.onDestory

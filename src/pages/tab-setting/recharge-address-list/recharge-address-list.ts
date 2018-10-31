@@ -116,8 +116,14 @@ export class RechargeAddressListPage extends SecondLevelPage {
     return this.addressService.editAddressById(id, addressClass).then( status => {
       if(status === "ok") {
         address.addressClass = addressClass;
+        this.appPageService.tryEmit("tab-asset@refresh",{
+            productHouseId: this.selectProduct.productHouseId,
+            type: AddressUse.Recharge,
+            id: this.cname,
+        });
       }
       return status;
     })
   }
+
 }

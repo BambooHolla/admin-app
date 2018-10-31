@@ -19,9 +19,9 @@
 
   <!-- 总资产 -->
   <div class="assets">
-      <div class="assets-message"><span>总资产</span><picasso-icon name="picasso-eye-{{appDataProvider?.hiddenData? 'close' : 'open'}}" (click)="handlerHiddenData()"></picasso-icon> </div>
-      <div class="assets-total">{{appDataProvider?.hiddenData? hidden_data_logo : "--接口未对接--"}}</div>
-      <div class="assets-rate" [hidden]="appDataProvider?.hiddenData">≈ --接口未对接-- <span class="unit">CNY</span></div>
+      <div class="assets-message"><span>总资产</span><picasso-icon name="picasso-eye-{{appDataService?.hiddenData? 'close' : 'open'}}" (click)="handlerHiddenData()"></picasso-icon> </div>
+      <div class="assets-total">{{appDataService?.hiddenData? hidden_data_logo : "--接口未对接--"}}</div>
+      <div class="assets-rate" [hidden]="appDataService?.hiddenData">≈ --接口未对接-- <span class="unit">CNY</span></div>
   </div>
   
   <ion-grid class="operate">

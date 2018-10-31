@@ -20,6 +20,7 @@ import { AppDataServiceProvider } from "../providers/app-data-service/app-data-s
 import { UserInfoProvider } from "../providers/user-info/user-info";
 import { ProductServiceProvider } from "../providers/product-service/product-service";
 import { AppFetchProvider } from "../providers/app-fetch/app-fetch";
+import { AppPageServiceProvider } from "../providers/app-page-service/app-page-service";
 
 export { is_dev, tryRegisterGlobal, global }
 
@@ -31,7 +32,8 @@ export class FLP_Tool {
     @FLP_Tool.FromGlobal modalCtrl!: ModalController;
     @FLP_Tool.FromGlobal menuCtrl!: MenuController;
     @FLP_Tool.FromGlobal platform!: Platform;
-    @FLP_Tool.FromGlobal appDataProvider!: AppDataServiceProvider;
+    @FLP_Tool.FromGlobal appDataService!: AppDataServiceProvider;
+    @FLP_Tool.FromGlobal appPageService!: AppPageServiceProvider;
     
     @FLP_Tool.FromGlobal appSetting!: AppSettingProvider;
     @FLP_Tool.FromGlobal productService!: ProductServiceProvider;

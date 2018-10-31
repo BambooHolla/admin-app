@@ -15,9 +15,13 @@ import { CommonService } from '../commonService';
 @Injectable()
 export class AppPageServiceProvider extends CommonService {
 
-  constructor() {
-    super();
-  }
+    constructor() {
+        super();
+    
+    }
 
+    tryEmit(event: string, data: any) {
+        this.emit(event, ...data);
+    }
   
 }

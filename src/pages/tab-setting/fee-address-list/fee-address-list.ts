@@ -86,6 +86,11 @@ export class FeeAddressListPage extends SecondLevelPage {
     return this.addressService.editAddressById(id, addressClass).then( status => {
       if(status === "ok") {
         address.addressClass = addressClass;
+        this.appPageService.tryEmit("tab-asset@refresh",{
+            productHouseId: this.productBTC.productHouseId,
+            type: AddressUse.Miner,
+            id: this.cname,
+        });
       }
       return status;
     })
@@ -109,6 +114,5 @@ export class FeeAddressListPage extends SecondLevelPage {
       }]
     }).present();
   }
-
 
 }

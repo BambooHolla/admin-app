@@ -119,12 +119,16 @@ export class WithdrawAddressListPage extends SecondLevelPage {
     let {id , addressClass} = address;
     addressClass = addressClass == "0" ? "1" : "0";
     return this.addressService.editAddressById(id, addressClass).then( status => {
-      if(status === "ok") {
-        address.addressClass = addressClass;
-      }
-      return status;
+        if(status === "ok") {
+            address.addressClass = addressClass;
+            this.appPageService.tryEmit("tab-asset@refresh",{
+                productHouseId: this.selectProduct.productHouseId,
+                type: AddressUse.Withdraw,
+                id: this.cname,
+            });
+        }
+        return status;
     })
   }
-
 
 }

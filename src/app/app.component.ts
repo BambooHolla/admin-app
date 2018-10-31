@@ -35,11 +35,12 @@ export class MyApp extends EventEmitter {
       name: "密码修改",
       icon: "picasso-change-pwd",
       path: "page-change-pwd",
-    },{
-      name: "登录设备",
-      icon: "picasso-login-device",
-      path: "page-change-pwd",
     },
+    // {
+    //   name: "登录设备",
+    //   icon: "picasso-login-device",
+    //   path: "page-change-pwd",
+    // },
     // {
     //   name: "手势密码",
     //   icon:'',
@@ -63,8 +64,8 @@ export class MyApp extends EventEmitter {
     public screenOrientation: ScreenOrientation,
     public menuCtrl: MenuController,
     public appSetting: AppSettingProvider,
-    public appDataProvider: AppDataServiceProvider,
-    public appPageProvider: AppPageServiceProvider,
+    public appDataService: AppDataServiceProvider,
+    public appPageService: AppPageServiceProvider,
     public userInfo: UserInfoProvider,
     public appFetch: AppFetchProvider,
     public loginService: LoginServiceProvider,
@@ -84,10 +85,11 @@ export class MyApp extends EventEmitter {
     window["platform"] = platform;
     window["jPush"] = jPush;
     window["appSetting"] = appSetting;
-    window["appDataProvider"] = appDataProvider;
+    window["appDataService"] = appDataService;
     window["appFetch"] = appFetch;
     window["userInfo"] = userInfo;
     window["productService"] = productService;
+    window["appPageService"] = appPageService;
     window["InformService"] = InformService;
     productService.getExchangeRate()
     if (!navigator["clipboard"]) {
@@ -287,7 +289,7 @@ export class MyApp extends EventEmitter {
 
 
   handlerMenuOpenPage(path: string) {
-    this.appPageProvider.emit('menu@page',path);
+    this.appPageService.emit('menu@page',path);
   }
 
   @asyncCtrlGenerator.loading()

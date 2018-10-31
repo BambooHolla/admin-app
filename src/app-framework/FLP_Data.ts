@@ -11,6 +11,6 @@ export class FLP_Data extends FLP_Form {
         super(navCtrl,navParams);
     }
     handlerHiddenData() {
-        this.appDataProvider.hiddenData = this.appDataProvider.hiddenData ? false : true;
+        this.appDataService.hiddenData = this.appDataService.hiddenData ? false : true;
     }
 }
