@@ -41,7 +41,7 @@
           <!-- <ion-item  >
             
           </ion-item> -->
-          <ion-item *ngFor="let address of selectAddressList" class="address-item">
+          <ion-item *ngFor="let address of selectAddressList" class="address-item" [class.disable]="address?.addressClass != '0'">
               <div class="item-group">
                   <ion-avatar item-start class="product-logo">
                       <img src="assets/imgs/{{selectProduct?.productName | lowercase}}-logo.png">
@@ -51,7 +51,7 @@
                       <p>{{address?.rechargeWithdrawAddress}}</p>
                   </div>
                 </div>
-                <picasso-icon name="picasso-disable" class="{{address?.addressClass == '0'?'':'disable'}}"  (click)="askAddressEnabled(address)"></picasso-icon>
+                <picasso-icon name="picasso-disable" (click)="askAddressEnabled(address)"></picasso-icon>
             </ion-item>
         </ion-list>
   </ion-content>

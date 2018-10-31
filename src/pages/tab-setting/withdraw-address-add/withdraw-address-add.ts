@@ -40,7 +40,7 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
   private addressList: AddressModel[] = [];
   private addressErrorList: {address: string, name: string}[];
   // private addressErrorIndex: number[] = [];
-  private createAddressNumber: number | string = undefined;
+  private createAddressNumber: number | string = 1;
   private validAddressNumber: number = 0;
 
 
@@ -266,7 +266,11 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     } else {
       addressInfo.rechargeWithdrawAddress = addressInfo.rechargeWithdrawAddress.replace(/\s/g,"");
     }
-    if(addressInfo) this.observable.next({type, addressInfo, index, withdrawType});
+    if(!addressInfo.addressName) {
+        return index == undefined ? this.importErrors["name"] = "请输入地址名称"
+        : this.addressErrorList[index]["name"] = "请输入地址名称"; 
+    }    
+    if(addressInfo && addressInfo.addressName) return this.observable.next({type, addressInfo, index, withdrawType});
   }
 
   checkAddressContent(data: {type: string, addressInfo: AddressModel, index: number, withdrawType: string}) {
@@ -279,32 +283,40 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
       checkPromise = this.addressService.checkAddress(productHouseId, addressInfo.rechargeWithdrawAddress);
     }
     return checkPromise.then(status => {
-      if(withdrawType === "create") {
-        delete this.addressErrorList[index][type]
-        this.checkRepeatAddress(addressInfo, index);
-      } else if(withdrawType === "import") {
-        delete this.importErrors[type];
-      }
+        if(!addressInfo.addressName) {
+            return index == undefined ? this.importErrors["name"] = "请输入地址名称"
+            : this.addressErrorList[index]["name"] = "请输入地址名称"; 
+        }    
+        if(withdrawType === "create") {
+            delete this.addressErrorList[index][type]
+            this.checkRepeatAddress(addressInfo, index);
+        } else if(withdrawType === "import") {
+            delete this.importErrors[type];
+        }
 
     }).catch(error => {
-      if(withdrawType === "create") {
-        this.addressErrorList[index][type] =  error.MESSAGE || error;
-      } else if(withdrawType === "import") {
-        this.importErrors[type] = error.MESSAGE || error;
-      }
+        if(!addressInfo.addressName) {
+            return index == undefined ? this.importErrors["name"] = "请输入地址名称"
+            : this.addressErrorList[index]["name"] = "请输入地址名称"; 
+        }    
+        if(withdrawType === "create") {
+            this.addressErrorList[index][type] =  error.MESSAGE || error;
+        } else if(withdrawType === "import") {
+            this.importErrors[type] = error.MESSAGE || error;
+        }
     })
   }
 
   handlerAddressNumberInput(type: string) {
     let _number;
     if(type === "+") {
-      _number = this.createAddressNumber || 0;
+      _number = this.createAddressNumber || 1;
       _number++;
       this.createAddressNumber = _number;
     } else {
-      _number = this.createAddressNumber || 0;
+      _number = this.createAddressNumber || 1;
       _number--;
-      this.createAddressNumber = _number < 0 ? 0 : _number;
+      this.createAddressNumber = _number < 1 ? 1 : _number;
     }
   }
 

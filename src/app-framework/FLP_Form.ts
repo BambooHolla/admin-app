@@ -26,11 +26,11 @@ export class FLP_Form extends FLP_Route {
            inputDom.value = inputDom.value.substr(0,length);
         }
     }
-    handlerInputValueInt(inputDom: any) {
+    handlerInputValueInt(inputDom: any, minValue: string | number = 0) {
         if(inputDom.value) {
-            const _index = inputDom.value.indexOf('.');
+            const _index = String(inputDom.value).indexOf('.');
             let _value = inputDom.value;
-            inputDom.value = +_value >= 0 ? String(_value) : "0";
+            inputDom.value = +_value >= 0 ? String(_value) : minValue;
             if(_index >= 0) {
                 inputDom.value =  _value.substr(0, _index)
             }

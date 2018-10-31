@@ -21,7 +21,7 @@
         暂无数据  
     </div>
     <ion-list class="address-group">
-        <ion-item *ngFor="let address of feeAddressList" class="address-item">
+        <ion-item *ngFor="let address of feeAddressList" class="address-item"  [class.disable]="address?.addressClass != '0'">
             <div class="item-group">
                 <ion-avatar item-start class="product-logo">
                     <img src="assets/imgs/btc-logo.png">
@@ -31,7 +31,7 @@
                     <p>{{address?.rechargeWithdrawAddress}}</p>
                 </div>
             </div>
-            <picasso-icon name="picasso-disable" class="{{address?.addressClass == '0'?'':'disable'}}"  (click)="askAddressEnabled(address)"></picasso-icon>
+            <picasso-icon name="picasso-disable" (click)="askAddressEnabled(address)"></picasso-icon>
         </ion-item>
     </ion-list>
 </ion-content>

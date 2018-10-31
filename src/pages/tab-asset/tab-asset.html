@@ -73,7 +73,7 @@
         <div class="overflow-ellipsis item-body-address"  (click)="routeTo('page-address-asset-list',{product:address,productName:'headerProduct'})">
           {{address?.rechargeWithdrawAddress}}
         </div>
-        <picasso-icon name="picasso-copy" (click)="copyAddress(address?.address)"></picasso-icon>
+        <picasso-icon name="picasso-copy" (click)="copyAddress(address?.rechargeWithdrawAddress)"></picasso-icon>
       </div>
     </ion-item>
   </ion-list>

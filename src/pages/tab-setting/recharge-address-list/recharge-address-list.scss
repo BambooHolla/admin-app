@@ -1,6 +1,8 @@
 page-recharge-address-list {
     .disable {
         color: #fb8a8a !important;
+        filter: grayscale(100%);
+        background-color: #f4f4f4;
     }
     .tip {
         text-align: center;
