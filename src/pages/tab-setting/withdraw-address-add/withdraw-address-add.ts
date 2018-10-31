@@ -41,6 +41,9 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
   private addressErrorList: {address: string, name: string}[];
   // private addressErrorIndex: number[] = [];
   private createAddressNumber: number | string = 1;
+  private createMin: number = 1;
+  private createMax: number = 10;
+
   private validAddressNumber: number = 0;
 
 
@@ -312,7 +315,7 @@ export class WithdrawAddressAddPage extends SecondLevelPage {
     if(type === "+") {
       _number = this.createAddressNumber || 1;
       _number++;
-      this.createAddressNumber = _number;
+      this.createAddressNumber = _number > 10 ? 10 : _number;
     } else {
       _number = this.createAddressNumber || 1;
       _number--;

@@ -35,7 +35,7 @@
           <div class="create-first">
             <div class="create-first-number">
               <ion-item>
-                  <ion-input #input type="number" max="100" min="0" step="1" [(ngModel)]="createAddressNumber" (ngModelChange)="handlerInputValueInt(input, 1)"></ion-input>
+                  <ion-input #input type="number" max="100" min="0" step="1" [(ngModel)]="createAddressNumber" (ngModelChange)="handlerInputValueInt(input, createMin, createMax)"></ion-input>
               </ion-item>
             </div>
             <div class="create-first-number-btn">
