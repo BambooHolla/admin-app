@@ -35,6 +35,7 @@ export class RechargeAddressListPage extends SecondLevelPage {
         if(this.selectProduct.productHouseId === productHouseId) {
           this.getAddressList(this.selectProduct);
         }
+        this.triggerPageEvent();
       }
     });
   }
@@ -116,14 +117,17 @@ export class RechargeAddressListPage extends SecondLevelPage {
     return this.addressService.editAddressById(id, addressClass).then( status => {
       if(status === "ok") {
         address.addressClass = addressClass;
-        this.appPageService.tryEmit("tab-asset@refresh",{
-            productHouseId: this.selectProduct.productHouseId,
-            type: AddressUse.Recharge,
-            id: this.cname,
-        });
+        this.triggerPageEvent();
       }
       return status;
     })
   }
 
+  triggerPageEvent() {
+    return this.appPageService.tryEmit("tab-asset@refresh",{
+        productHouseId: this.selectProduct.productHouseId,
+        type: AddressUse.Recharge,
+        id: this.cname,
+    });
+  }
 }

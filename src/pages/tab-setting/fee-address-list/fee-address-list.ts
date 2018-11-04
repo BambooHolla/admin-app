@@ -33,6 +33,7 @@ export class FeeAddressListPage extends SecondLevelPage {
         const { productHouseId } = data;
           this.getAddressList();
       }
+      this.triggerPageEvent();
     });
   }
 
@@ -86,18 +87,13 @@ export class FeeAddressListPage extends SecondLevelPage {
     return this.addressService.editAddressById(id, addressClass).then( status => {
       if(status === "ok") {
         address.addressClass = addressClass;
-        this.appPageService.tryEmit("tab-asset@refresh",{
-            productHouseId: this.productBTC.productHouseId,
-            type: AddressUse.Miner,
-            id: this.cname,
-        });
+        this.triggerPageEvent();
       }
       return status;
     })
   }
   
   handlerAddAddress(type:string) {
-   
     this.actionSheetCtrl.create({
       cssClass: "add-address",
       buttons: [{
@@ -113,6 +109,14 @@ export class FeeAddressListPage extends SecondLevelPage {
         }
       }]
     }).present();
+  }
+
+  triggerPageEvent() {
+    this.appPageService.tryEmit("tab-asset@refresh",{
+        productHouseId: this.productBTC.productHouseId,
+        type: AddressUse.Miner,
+        id: this.cname,
+    });
   }
 
 }
