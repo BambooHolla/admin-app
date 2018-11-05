@@ -59,8 +59,8 @@ export function asyncErrorWrapGenerator(
                     // 已经弹出，不再提示
                     return keep_throw? Promise.reject(err) : err;
                 }
+                let POWER_CODE: number = err.POWER_CODE;
                 let err_msg;
-                let code: number;
                 if(err instanceof Error) {
                     err_msg = err.message;
                 } else if(err.message) {
@@ -70,7 +70,6 @@ export function asyncErrorWrapGenerator(
                 } else {
                     err_msg = err + '';
                 }
-                if(err.code == -1) code = +err.code;
                 console.group("CATCH BY asyncErrorWrapGenerator:");
                 console.warn(err);
                 console.groupEnd();
@@ -128,7 +127,7 @@ export function asyncErrorWrapGenerator(
                     ); 
                     const present_able = _dialogGenerator(dialog_opts, this);
                     Promise.resolve<Modal | Alert>(present_able).then( p => {
-                        if(code != -1) {
+                        if(POWER_CODE != -1) {
                           if (opts && opts.independent) {
                             p.present();
                           } else {

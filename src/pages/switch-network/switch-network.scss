@@ -1,0 +1,28 @@
+page-switch-network {
+    .scroll-content {
+        background-image: url('../assets/imgs/setting-bj.png');
+        background-size: 100% auto;
+        background-repeat: no-repeat;
+        overflow-y: hidden;
+        background-position: bottom left;
+    }
+
+    .setting-type {
+        font-size: 1.8rem;
+        line-height: 3.4rem;
+        color: #586576;
+        .item-inner {
+            border-bottom: 1px solid #eaeaec !important;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+        }
+        .ion-ios-arrow-forward {
+            color: #586576;
+        }
+        i {
+            color: #4f80a6;
+            font-size: 2rem;
+            margin-right: 4px;
+        }
+    }
+}

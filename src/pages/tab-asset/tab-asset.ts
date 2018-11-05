@@ -20,7 +20,8 @@ import { BigNumber } from 'bignumber.js';
 export class TabAssetPage extends FirstLevelPage {
 	private selectTypeIndex: number = 0;
 	// 用于显示
-	private selectAddressList: AddressModel[] = [];
+    private selectAddressList: AddressModel[] = [];
+    private addressTotalAssets: number | string = 0;
 	// 保存可用、禁用地址的默认排序
 	private disableArr: AddressModel[] = [];
 	private usableArr: AddressModel[] = []
@@ -118,7 +119,8 @@ export class TabAssetPage extends FirstLevelPage {
       this.selectProduct.productHouseId,
       this.addressType,
     ).then(addressList => {
-		let _concatArr = [];
+        let _concatArr = [];
+        this.addressTotalAssets = 0;
 		// 需求：禁用的全部在最底下,加上排序
 		// 做法：先筛选出可用，跟禁用2个数组，分别排序，在合并
 		this.usableArr = addressList
@@ -126,7 +128,13 @@ export class TabAssetPage extends FirstLevelPage {
 		this.disableArr = addressList
 		.filter(address => address.addressClass == String(1));
 		_concatArr = [].concat(this.sortAddressList(this.usableArr),this.sortAddressList(this.disableArr));
-		this.selectAddressList = _concatArr;
+        this.selectAddressList = _concatArr;
+        this.selectAddressList.forEach(address => {
+            if(!isNaN(+address.addressBalance)) {
+                let _asset = new BigNumber(address.addressBalance);
+                this.addressTotalAssets = _asset.plus(this.addressTotalAssets).toString();
+            }
+        })
     })
   }
 

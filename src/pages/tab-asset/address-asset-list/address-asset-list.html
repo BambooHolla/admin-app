@@ -7,19 +7,19 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{productName}}:{{product?.title}}</ion-title>
+    <ion-title>{{product?.productName}}:{{addressInfo?.addressName}}</ion-title>
   </ion-navbar>
  <!-- 总资产 -->
  <div class="assets">
     <div class="assets-logo">
-        <img src="assets/imgs/{{productName | lowercase}}-logo.png">
+        <img src="assets/imgs/{{product?.productName | lowercase}}-logo.png">
     </div>
     <div class="assets-message"><span>总资产</span></div>
-    <div class="assets-total">123456789.123456789</div>
-    <div class="assets-rate">≈ 132132132131213 <span class="unit">CNY</span></div>
-    <div class="assets-address" (click)="copyAddress(product?.address)">
+    <div class="assets-total">{{addressInfo?.addressBalance | numberDecimal}}</div>
+    <div class="assets-rate">≈ "接口暂无" <span class="unit">CNY</span></div>
+    <div class="assets-address" (click)="copyAddress(addressInfo?.rechargeWithdrawAddress)">
       <picasso-icon name="picasso-bj-account"></picasso-icon> 
-      {{product?.address}}
+      {{addressInfo?.rechargeWithdrawAddress}}
     </div>
 </div>
 
@@ -28,7 +28,7 @@
   <ion-row class="type">
     <ion-col (click)="checkType(item,i)" *ngFor="let item of typeArr,let i = index" [class.action]="selectTypeIndex == i">
       <div class="name">
-        {{item}}
+        {{item.name}}
   </div>
       <div class="bottom-line" [hidden]="selectTypeIndex != i"></div>
     </ion-col>
@@ -38,22 +38,25 @@
 
 
 <ion-content>
+    <div *ngIf="!selectTypeAddressAssetList || selectTypeAddressAssetList.length == 0" class="tip">
+        暂无数据  
+    </div>
     <ion-list class="address-group">
-        <ion-item  *ngFor="let address of selectAddress" class="address-item" (click)="routeTo('page-address-asset-details',{address:address,productName:productName})">
+        <ion-item  *ngFor="let address of selectTypeAddressAssetList" class="address-item" (click)="routeTo('page-address-asset-details',{address:address, product:product})">
           <ion-avatar item-start class="product-logo">
              
-            <ng-container [ngSwitch]="address?.status">
-                <picasso-icon *ngSwitchCase="1" name="picasso-asset-in" class="success"></picasso-icon>
-                <picasso-icon *ngSwitchCase="2" name="picasso-asset-out" class="warning"></picasso-icon>
-                <picasso-icon *ngSwitchCase="3" name="picasso-asset-fail" class="error"></picasso-icon>
+            <ng-container [ngSwitch]="address?.transType">
+                <picasso-icon *ngSwitchCase="'001'" name="picasso-asset-in" class="success"></picasso-icon>
+                <picasso-icon *ngSwitchCase="'002'" name="picasso-asset-out" class="warning"></picasso-icon>
+                <!-- <picasso-icon *ngSwitchCase="3" name="picasso-asset-fail" class="error"></picasso-icon> -->
             </ng-container>
           </ion-avatar>
           <div class="item-header">
             <div class="item-header-title">
-              {{address?.assets}} <span class="unit">{{productName}}</span>
+              {{address?.transAmount}} <span class="unit">{{product?.productName}}</span>
             </div>
             <div class="item-header-total">
-              {{address?.fee}}
+              {{address?.transFee}}
             </div>
           </div>
           <div class="address-item-body">
@@ -61,9 +64,15 @@
               {{address?.address}}
             </div>
             <div class="item-body-date">
-              {{address?.date | date:"yyyy-MM-dd"}}
+              {{address?.transDate | date:"yyyy-MM-dd"}}
             </div>
           </div>
         </ion-item>
       </ion-list>
+
+    <!-- 加载更多 -->
+    <ion-infinite-scroll [enabled]="hasMore" (ionInfinite)="loadMoreAssets($event)">
+        <ion-infinite-scroll-content loadingText="">
+        </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
 </ion-content>

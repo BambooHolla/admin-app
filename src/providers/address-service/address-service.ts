@@ -10,24 +10,29 @@ import { AppSettingProvider } from '../app-setting/app-setting';
 */
 @Injectable()
 export class AddressServiceProvider {
-  // 初始化密钥
-  readonly INIT_KEY = this.appSetting.APP_URL("/platform/key/init"); 
-  // 获取地址列表
-  readonly GET_ADDRESS_LIST = this.appSetting.APP_URL("/account/instAddress");
-  // 地址是否启用
-  readonly EDIT_ADDRESS_BY_ID = this.appSetting.APP_URL("/account/instAddress/update/:id");
-  // 检验地址名称
-  readonly CHECK_ADDRESS_NAME = this.appSetting.APP_URL("/account/instAddress/name/validate");
-  // 检验地址有效性
-  readonly CHECK_ADDRESS = this.appSetting.APP_URL("/account/instAddress/address/validate");
-  // 保存充值地址
-  readonly SAVE_RECHARGE_ADDRESS = this.appSetting.APP_URL("/account/instAddress/recharge/add");
-  // 批量生成地址（提现:withdraw，矿工费:fee）
-  readonly CREATE_WF_ADDRESS_LIST = this.appSetting.APP_URL("/account/instAddress/create");
-  // 保存批量生成的地址
-  readonly SAVE_BATCH_ADDRESS_LIST = this.appSetting.APP_URL("/account/instAddress/save");
-  // 导入地址私钥
-  readonly IMPORT_ADDRESS_KEY = this.appSetting.APP_URL("/account/instAddress/withdraw/import");
+    // 初始化密钥
+    readonly INIT_KEY = this.appSetting.APP_URL("/platform/key/init"); 
+    // 获取地址列表
+    readonly GET_ADDRESS_LIST = this.appSetting.APP_URL("/account/instAddress");
+    // 地址是否启用
+    readonly EDIT_ADDRESS_BY_ID = this.appSetting.APP_URL("/account/instAddress/update/:id");
+    // 检验地址名称
+    readonly CHECK_ADDRESS_NAME = this.appSetting.APP_URL("/account/instAddress/name/validate");
+    // 检验地址有效性
+    readonly CHECK_ADDRESS = this.appSetting.APP_URL("/account/instAddress/address/validate");
+    // 保存充值地址
+    readonly SAVE_RECHARGE_ADDRESS = this.appSetting.APP_URL("/account/instAddress/recharge/add");
+    // 批量生成地址（提现:withdraw，矿工费:fee）
+    readonly CREATE_WF_ADDRESS_LIST = this.appSetting.APP_URL("/account/instAddress/create");
+    // 保存批量生成的地址
+    readonly SAVE_BATCH_ADDRESS_LIST = this.appSetting.APP_URL("/account/instAddress/save");
+    // 导入地址私钥
+    readonly IMPORT_ADDRESS_KEY = this.appSetting.APP_URL("/account/instAddress/withdraw/import");
+
+    // 地址交易列表
+    readonly ADDRESS_ASSET_LIST = this.appSetting.APP_URL("/account/instAddress/transactions");
+    // 地址交易详情
+    readonly ADDRESS_ASSET_DETAILS = this.appSetting.APP_URL("/account//instAddress/transactions/:txid")
 
 
   constructor(
@@ -131,6 +136,36 @@ export class AddressServiceProvider {
     );
   }
   
+    getAddressAssetList(data: {
+        productHouseId: string;
+        address: string;
+        transType: string; // 001 转入 002转出
+        page: number;
+        pageSize: number;
+    }) {
+        return this.fetch.get<AddressTransModel[]>(
+            this.ADDRESS_ASSET_LIST,
+            {
+                search: {
+                    ...data
+                }        
+            }
+        )
+    }
+    getAddressAssetDetails(productHouseId: string, transType: string, txid: string) {
+        return this.fetch.get(
+            this.ADDRESS_ASSET_DETAILS,
+            {
+                search: {
+                    productHouseId,
+                    transType
+                },
+                params: {
+                    txid
+                }
+            }
+        )
+    }
 }
 
 export type keyModel = {
@@ -155,4 +190,21 @@ export type AddressModel = {
   lstModDateTime?: string;
   productHouseId?: string;
   rechargeWithdrawAddress?: string;
+  transType?: string;
+  txid?: string;
+}
+
+export enum TransType {
+    All = '', // 全部
+    In = "001", // 转入
+    Out = "002", // 转出
+}
+
+export type AddressTransModel = {
+    address: string;
+    transAmount: number | string;
+    transDate: string;
+    transFee: number | string;
+    transType: string;
+    txid: string;
 }

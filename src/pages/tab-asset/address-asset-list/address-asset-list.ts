@@ -1,7 +1,9 @@
-import { Component, Optional } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, Optional, transition, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, InfiniteScroll, Content } from 'ionic-angular';
 import { SecondLevelPage } from '../../../app-framework/SecondLevelPage';
 import { asyncCtrlGenerator } from '../../../app-framework/Decorator';
+import { AddressModel, AddressServiceProvider, TransType, AddressTransModel } from '../../../providers/address-service/address-service';
+import { BigNumber } from 'bignumber.js';
 /**
  * Generated class for the AddressAssetListPage page.
  *
@@ -15,53 +17,94 @@ import { asyncCtrlGenerator } from '../../../app-framework/Decorator';
   templateUrl: 'address-asset-list.html',
 })
 export class AddressAssetListPage extends SecondLevelPage {
-  private productName: string;
-  private product;
-  private typeArr = ["全部","转入","转出","失败"];
-  private selectTypeIndex: number = 0;
-  private selectAddress: any[] = [
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"134534536.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:2,date:"2018-10-08 12:00:01"},
+    private addressInfo: AddressModel;
+    private page: number = 0;
+    private pageSize: number = 10;
+    private hasMore: boolean = true;
+    private hasChangeType: boolean = true;
+    private totalAssets: number | string = 0;
+    private product;
+    private typeArr = [
+        {
+            name: "全部",
+            value: TransType.All,
+        },
+        {
+            name: "转入",
+            value: TransType.In,
+        },
+        {
+            name: "转出",
+            value: TransType.Out,
+        }
+    ];
+    private selectTypeIndex: number = 0;
+    private selectTypeAddressAssetList: AddressTransModel[];
 
-    {assets:"16.548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:3,date:"2018-10-08 12:00:01"},
-    {assets:"1436.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:2,date:"2018-10-08 12:00:01"},
-
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:3,date:"2018-10-08 12:00:01"},
-
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-    {assets:"136.546548", fee:'1321321.1321321',address:"3NEtefBUCiTxyJwUbRQnrGXXy9BxkH4GRy",status:1,date:"2018-10-08 12:00:01"},
-
-  ];
-  constructor(
-    public navCtrl: NavController, 
-    public navParams: NavParams,
-  ) {
-    super(navCtrl, navParams);
-  }
-
-  @AddressAssetListPage.willEnter
-  init() {
-    this.product = this.navParams.data.product
-    this.productName = this.navParams.data.productName
-  }
-
-  checkType(item,i) {
-    this.selectTypeIndex = i;
-  }
-  
-  @asyncCtrlGenerator.success("地址已经成功复制到剪切板")
-  @asyncCtrlGenerator.error("地址复制失败")
-  copyAddress(address: string) {
-    if(!navigator["clipboard"]) {
-      return Promise.reject( "复制插件异常");
+    constructor(
+        public navCtrl: NavController, 
+        public navParams: NavParams,
+        public addressService: AddressServiceProvider,
+    ) {
+        super(navCtrl, navParams);
+        this.addressInfo = this.navParams.data.address;
+        this.product = this.navParams.data.product;
+        this.init();
     }
-    return navigator["clipboard"].writeText(address);
-  }
+
+    @asyncCtrlGenerator.loading()
+    @asyncCtrlGenerator.error("获取数据失败")
+    init() {
+        this.selectTypeAddressAssetList = [];
+        this.page = 1; 
+        this.pageSize = 10;
+        return this.getAddressAssetList().then(assetList => {
+            this.selectTypeAddressAssetList = assetList;
+        });
+    }
+
+    @ViewChild(Content) content: Content;
+    async checkType(item,i) {
+        if(!this.hasChangeType || this.selectTypeIndex === i) return;
+        await this.content.scrollToTop(100);
+        this.selectTypeIndex = i;
+        return this.init();
+    }
+
+
+    @ViewChild(InfiniteScroll) infiniteScroll: InfiniteScroll;
+    async loadMoreAssets(ctrl: InfiniteScroll) {
+        this.page += 1;
+        this.hasChangeType = false;
+        this.selectTypeAddressAssetList.push(...(await this.getAddressAssetList()));
+        this.hasChangeType = true;
+        ctrl.complete();
+    }
+
+   
+    getAddressAssetList() {
+        return this.addressService.getAddressAssetList({
+            productHouseId: this.product.productHouseId,
+            // address: this.addressInfo.rechargeWithdrawAddress,
+            address: "mvDQzzLHRAA7DiXsDWrNPhQLrXv4ehfYuY",
+            transType: this.typeArr[this.selectTypeIndex].value,
+            page: this.page,
+            pageSize: this.pageSize,
+        })
+        .then(async assetList => {
+            this.hasMore = assetList.length === this.pageSize;
+            this.infiniteScroll &&
+            this.infiniteScroll.enable(this.hasMore);
+            return assetList;
+        })
+    }
+
+    @asyncCtrlGenerator.success("地址已经成功复制到剪切板")
+    @asyncCtrlGenerator.error("地址复制失败")
+    copyAddress(address: string) {
+        if(!navigator["clipboard"]) {
+            return Promise.reject( "复制插件异常");
+        }
+        return navigator["clipboard"].writeText(address);
+    }
 }

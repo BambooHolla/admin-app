@@ -13,6 +13,7 @@ export class ServerResError extends Error {
     static parseErrorMessage(code, message) {
         const CODE_LIST = [code + ""];
         var MESSAGE = message;
+        var power_code = code == -1 ? -1 : undefined;
         while (MESSAGE.indexOf("500 - ") === 0) {
             const rest_msg = MESSAGE.substr(6);
             try {
@@ -25,18 +26,20 @@ export class ServerResError extends Error {
                 }
             } catch (err) {}
         }
-        return new ServerResError(CODE_LIST, MESSAGE);
+        return new ServerResError(CODE_LIST, MESSAGE, +power_code);
     }
 
-    constructor(code_list: string[], message: string) {
+    constructor(code_list: string[], message: string, power_code: number) {
         super(message);
         this.MESSAGE = String(message);
         this.CODE_LIST = code_list;
         this.stack += "\t\n" + code_list.join("\t\n");
+        this.POWER_CODE = power_code;
     }
     CODE_LIST: string[];
     CODE: string;
     MESSAGE: string;
+    POWER_CODE: number;
 }
 
 @Injectable()

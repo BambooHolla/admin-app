@@ -1,4 +1,12 @@
 page-login {
+    .network {
+        position: absolute;
+        color: #9cc9ec;
+        top: 2rem;
+        left: 6vw; //12.5(form-padding)*2/3 - 1rem~
+        padding: 1rem;
+        font-size: 1.4rem;
+    }
     .scroll-content {
         background-image: url('../assets/imgs/setting-bj.png');
         background-size: cover;

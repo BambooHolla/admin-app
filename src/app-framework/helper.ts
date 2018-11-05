@@ -16,9 +16,14 @@ export function tryRegisterGlobal(name, obj) {
 	}	
 }
 
+
+
 /*通用的AppUrl*/
 export class AppUrl {
-	static SERVER_URL = "http://192.168.18.24:40001";
+	static SERVER_URL = JSON.parse(
+        localStorage.getItem("SERVER_URL") ||
+            JSON.stringify("http://192.168.18.24:40001"),
+    );
 	static SERVER_PREFIX = "/api/v1/bngj";
 	// static SERVER_PREFIX = "";
 	constructor(public path: string) {}

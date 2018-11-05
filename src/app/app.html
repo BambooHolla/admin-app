@@ -23,9 +23,11 @@
           </div>
         </ion-item>
         <ion-list class="menu-account-handle">
-            <button menuClose ion-item *ngFor="let p of pages" (click)="handlerMenuOpenPage(p.path)">
-                <picasso-icon [name]="p?.icon"></picasso-icon> {{p?.name}}
-            </button>
+            <ng-container *ngFor="let p of pages">
+                <button menuClose ion-item (click)="handlerMenuOpenPage(p.path)" *ngIf="p?.show" >
+                    <picasso-icon [name]="p?.icon"></picasso-icon> {{p?.name}}
+                </button>
+            </ng-container>
         </ion-list>
       
     </ion-content>

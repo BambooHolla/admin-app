@@ -13,7 +13,7 @@ import {
 } from "../../app-framework/RxExtends";
 @Injectable()
 export class AppSettingProvider extends CommonService {
-    static readonly APP_ID: string = "com.picaex.adminApp";
+    static readonly APP_ID: string = "com.picaex.superapp";
     static readonly PLATFORM_TYPE = "10011001";
     // 特殊字符，加密用
     static readonly SPECIAL_CHARACTER: string = "!#%&(@$^*)~_+"

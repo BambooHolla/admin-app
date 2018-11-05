@@ -31,6 +31,9 @@ import { IonicStorageModule } from "@ionic/storage";
 // 组件
 import { ComponentsModule } from '../components/components.module';
 
+// 管道
+import { PipesModule } from '../pipes/pipes.module';
+
 // 指令 
 import { DirectivesModule } from '../directives/directives.module';
 
@@ -54,6 +57,7 @@ import { UserInfoProvider } from '../providers/user-info/user-info';
 import { ProductServiceProvider } from '../providers/product-service/product-service';
 import { InformServiceProvider } from '../providers/inform-service/inform-service';
 import { AddressServiceProvider } from '../providers/address-service/address-service';
+
 
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
@@ -136,6 +140,7 @@ const providers = [
       },
     }),
     DirectivesModule,
+    PipesModule,
   ],
   bootstrap: [IonicApp],
   entryComponents:pages,

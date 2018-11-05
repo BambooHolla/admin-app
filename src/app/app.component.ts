@@ -35,17 +35,26 @@ export class MyApp extends EventEmitter {
       name: "密码修改",
       icon: "picasso-change-pwd",
       path: "page-change-pwd",
+      show: true,
     },
-    // {
-    //   name: "登录设备",
-    //   icon: "picasso-login-device",
-    //   path: "page-change-pwd",
-    // },
-    // {
-    //   name: "手势密码",
-    //   icon:'',
-    //   path: "gesture-lock"
-    // }
+    {
+      name: "登录设备",
+      icon: "picasso-login-device",
+      path: "page-change-pwd",
+      show: false,
+    },
+    {
+      name: "手势密码",
+      icon:'',
+      path: "gesture-lock",
+      show: false,
+    },
+    {
+        name: "切换网络",
+        icon: "",
+        path: "page-switch-network",
+        show: true,
+    }
   ];
   // rootPage:any = TabsPage;
   static WINDOW_MAX_HEIGHT = 0;

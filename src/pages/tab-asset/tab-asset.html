@@ -20,7 +20,7 @@
   <!-- 总资产 -->
   <div class="assets">
       <div class="assets-message"><span>总资产</span><picasso-icon name="picasso-eye-{{appDataService?.hiddenData? 'close' : 'open'}}" (click)="handlerHiddenData()"></picasso-icon> </div>
-      <div class="assets-total">{{appDataService?.hiddenData? hidden_data_logo : "--接口未对接--"}}</div>
+      <div class="assets-total">{{appDataService?.hiddenData? hidden_data_logo :(addressTotalAssets | numberDecimal)}}</div>
       <div class="assets-rate" [hidden]="appDataService?.hiddenData">≈ --接口未对接-- <span class="unit">CNY</span></div>
   </div>
   
@@ -63,17 +63,17 @@
     </div>
   <ion-list class="address-group">
     <ion-item  *ngFor="let address of selectAddressList" class="address-item" [class.disable]="address?.addressClass != '0'">
-      <div class="item-header"  (click)="routeTo('page-address-asset-list',{product:address,productName:'headerProduct'})">
+      <div class="item-header"  (click)="routeTo('page-address-asset-list',{address: address, product:selectProduct})">
         <div class="item-header-title">
           {{address?.addressName}}
         </div>
         <div class="item-header-total">
-          {{address?.addressBalance}}
+          {{address?.addressBalance | numberDecimal}}
           <span class="unit">{{selectProduct?.productName}}</span>
         </div>
       </div>
       <div class="address-item-body">
-        <div class="overflow-ellipsis item-body-address"  (click)="routeTo('page-address-asset-list',{product:address,productName:'headerProduct'})">
+        <div class="overflow-ellipsis item-body-address"  (click)="routeTo('page-address-asset-list',{address: address, product:selectProduct})">
           {{address?.rechargeWithdrawAddress}}
         </div>
         <picasso-icon name="picasso-copy" (click)="copyAddress(address?.rechargeWithdrawAddress)"></picasso-icon>

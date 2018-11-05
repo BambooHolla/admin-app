@@ -16,10 +16,10 @@
 <ion-content>
   <div class="address-title">
     <div class="address-type">
-      <ng-container [ngSwitch]="address?.status">
-          <picasso-icon *ngSwitchCase="1" name="picasso-asset-in" class="success"></picasso-icon>
-          <picasso-icon *ngSwitchCase="2" name="picasso-asset-out" class="warning"></picasso-icon>
-          <picasso-icon *ngSwitchCase="3" name="picasso-asset-fail" class="error"></picasso-icon>
+      <ng-container [ngSwitch]="address?.transType">
+            <picasso-icon *ngSwitchCase="'001'" name="picasso-asset-in" class="success"></picasso-icon>
+            <picasso-icon *ngSwitchCase="'002'" name="picasso-asset-out" class="warning"></picasso-icon>
+            <!-- <picasso-icon *ngSwitchCase="3" name="picasso-asset-fail" class="error"></picasso-icon> -->
       </ng-container>
     </div>
     <div class="address-asset">
