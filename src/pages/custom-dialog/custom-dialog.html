@@ -11,7 +11,7 @@
   </ion-navbar> -->
 
 </ion-header>
-<ion-content (click)="tryCloseDialog($event)">
+<ion-content (click)="tryCloseDialog($event)"  no-bounce>
   <div class="dialog-wrapper">
     <button *ngIf="!buttons.length" class="close-button" (click)="closeDialog()">
       <picasso-icon name="picasso-guanbi"></picasso-icon>
