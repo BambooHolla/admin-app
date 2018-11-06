@@ -2,7 +2,7 @@
 ### 由于有的ionic插件会生成与之相对应的 <uses-feature>，但是框架本身也有默认生成的<uses-feature>，如果刚好这2个一直，就会报错，那么需要手动去删除默认生成的<uses-feature>
 ###删除位置为 ./platforms/android/adroid.json 删除对应的声明模块
 
-
+1
 
 
 ### 关于极光推送
