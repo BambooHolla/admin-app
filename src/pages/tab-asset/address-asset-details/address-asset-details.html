@@ -23,33 +23,38 @@
       </ng-container>
     </div>
     <div class="address-asset">
-      {{address?.assets}}
-      <span class="unit">{{productName}}</span>
+      {{addressTransInfo?.transAmount}}
+      <span class="unit">{{product?.productName}}</span>
     </div>
   </div>
   <div class="address-details-group">
     <div class="address-details-item">
       <div class="address-details-item-label">发款方</div>
       <div class="address-details-item-content">
-        {{address?.address}}
+        {{addressTransInfo?.address}}
       </div>
     </div>
-    <div class="address-details-item">
-      <div class="address-details-item-label">收款方</div>
-      <div class="address-details-item-content">
-          {{address?.address}}
-      </div>
-    </div>
+    <ng-container *ngIf="addressTransInfo?.details" >
+        <div class="address-details-item">
+          <div class="address-details-item-label">收款方</div>
+          <ol>
+              <li  class="address-details-item-content" *ngFor="let item of addressTransInfo?.details;let i = index" >
+                    {{item?.to}}
+              </li>
+          </ol>
+        
+        </div>
+    </ng-container>
     <div class="address-details-item">
       <div class="address-details-item-label">矿工费用</div>
       <div class="address-details-item-content">
-          {{address?.fee}}
+          {{addressTransInfo?.transFee}}
       </div>
     </div>
     <div class="address-details-item">
       <div class="address-details-item-label">交易时间</div>
       <div class="address-details-item-content">
-        {{address?.date | date:"yyyy-MM-dd hh:MM:ss"}}
+        {{addressTransInfo?.transDate | date:"yyyy-MM-dd hh:MM:ss"}}
       </div>
     </div>
   </div>

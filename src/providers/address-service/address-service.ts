@@ -32,7 +32,7 @@ export class AddressServiceProvider {
     // 地址交易列表
     readonly ADDRESS_ASSET_LIST = this.appSetting.APP_URL("/account/instAddress/transactions");
     // 地址交易详情
-    readonly ADDRESS_ASSET_DETAILS = this.appSetting.APP_URL("/account//instAddress/transactions/:txid")
+    readonly ADDRESS_ASSET_DETAILS = this.appSetting.APP_URL("/account/instAddress/transactions/:txid")
 
 
   constructor(
@@ -152,13 +152,16 @@ export class AddressServiceProvider {
             }
         )
     }
-    getAddressAssetDetails(productHouseId: string, transType: string, txid: string) {
-        return this.fetch.get(
+    getAddressAssetDetails(txid: string, data: {
+        productHouseId: string;
+        transType: string;
+        address: string;        
+    }) {
+        return this.fetch.get<AddressTransModel>(
             this.ADDRESS_ASSET_DETAILS,
             {
                 search: {
-                    productHouseId,
-                    transType
+                    ...data
                 },
                 params: {
                     txid
@@ -207,4 +210,5 @@ export type AddressTransModel = {
     transFee: number | string;
     transType: string;
     txid: string;
+    details?: any;
 }

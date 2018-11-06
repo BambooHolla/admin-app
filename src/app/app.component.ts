@@ -51,7 +51,7 @@ export class MyApp extends EventEmitter {
     },
     {
         name: "切换网络",
-        icon: "",
+        icon: "picasso-network",
         path: "page-switch-network",
         show: true,
     }

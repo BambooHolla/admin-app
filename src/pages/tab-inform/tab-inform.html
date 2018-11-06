@@ -18,7 +18,10 @@
 </ion-header>
 
 
-<ion-content>
+<ion-content   no-bounce>
+        <!-- <div class="tip">
+            暂无消息
+        </div> -->
       <ion-list [class.padding-bottom]="informLiseElePadding">
         <ion-item *ngFor="let inform of inform_list" class="inform-box" (click)="routeTo('page-inform-detail', inform)">
             <div class="inform-header">

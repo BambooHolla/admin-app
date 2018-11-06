@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { SecondLevelPage } from '../../../app-framework/SecondLevelPage';
 import { TabsPage } from '../../tabs/tabs';
 import { ProductModel } from '../../../providers/product-service/product-service';
-import { AddressModel, AddressServiceProvider } from '../../../providers/address-service/address-service';
+import { AddressServiceProvider, AddressTransModel } from '../../../providers/address-service/address-service';
 import { asyncCtrlGenerator } from '../../../app-framework/Decorator';
 /**
  * Generated class for the AddressAssetDetailsPage page.
@@ -18,8 +18,9 @@ import { asyncCtrlGenerator } from '../../../app-framework/Decorator';
   templateUrl: 'address-asset-details.html',
 })
 export class AddressAssetDetailsPage extends SecondLevelPage {
-  private address: AddressModel;
+  private address: AddressTransModel;
   private product: ProductModel;
+  private addressTransInfo: AddressTransModel;
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
@@ -34,11 +35,18 @@ export class AddressAssetDetailsPage extends SecondLevelPage {
 
   @asyncCtrlGenerator.loading()
   @asyncCtrlGenerator.error("获取数据失败")
-  init() {
-    debugger
+  async init() {
     this.address = this.navParams.data.address;
     this.product = this.navParams.data.product;
-    return this.addressService.getAddressAssetDetails(this.product.productHouseId, this.address.transType, this.address.txid)
+    const {
+        transType,
+        address,
+    } = this.address;
+    this.addressTransInfo = await this.addressService.getAddressAssetDetails(this.address.txid, {
+        productHouseId: this.product.productHouseId,
+        transType,
+        address,
+    });
   }
 
  
